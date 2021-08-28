@@ -41,6 +41,20 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item  has-sub  {{ (Request::is('price/*')) ? 'active' : ''}}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-stack"></i>
+                        <span>Harga TBS</span>
+                    </a>
+                    <ul class="submenu  {{ (Request::is('price/*')) ? 'active' : ''}} ">
+                        <li class="submenu-item   {{ (Request::is('price/create')) ? 'active' : ''}}">
+                            <a href="{{url('/price/create')}}">Input Harga TBS</a>
+                        </li>
+                        <li class="submenu-item  {{ (Request::is('price/manage')) ? 'active' : ''}}">
+                            <a href="{{url('/price/manage')}}">Manage Harga TBS</a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="sidebar-item  has-sub  {{ (Request::is('supplier/*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>

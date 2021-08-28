@@ -18,6 +18,7 @@ class CreatePricesTable extends Migration
             $table->float('price',18,4);
             $table->float('margin',18,4);
             $table->timestamps();
+        });
     }
 
     /**
