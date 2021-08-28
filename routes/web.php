@@ -54,6 +54,18 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/material/manage', 'MaterialController@viewManage');
 
 
+    Route::prefix('price')->group(function(){
+        $cr = "PriceController";
+        Route::get('create', "$cr@viewCreate");
+        Route::post('create', "$cr@store");
+        Route::post('store', "$cr@store");
+        Route::get('{id}/edit', 'MaterialController@edit');
+        Route::post('update', 'MaterialController@update');
+        Route::get('{id}/delete', 'PriceController@destroy');
+        Route::get('manage', "$cr@viewManage");    
+    });
+
+
     Route::get('/supplier/create', [App\Http\Controllers\SupplierController::class, 'viewCreate']);
     Route::get('/supplier/{id}/delete', [App\Http\Controllers\SupplierController::class, 'destroy']);
     Route::post('/supplier/store', 'SupplierController@store');
