@@ -28,3 +28,13 @@ Route::group([
     Route::post('/refresh', 'CustomAuthController@refresh');
     Route::get('/user-profile', 'CustomAuthController@me');    
 });
+
+Route::group([
+    // 'middleware' => 'api',
+], function(){
+
+    Route::prefix('price')->group(function(){
+        Route::get('/','PriceController@getAll');
+    });
+
+});

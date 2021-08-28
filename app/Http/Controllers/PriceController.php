@@ -118,4 +118,41 @@ class PriceController extends Controller
         }
 
     }
+
+    public function getAll(Request $request)
+    {
+        $data = Price::all();
+        $latestPriceObject = Price::latest()->first();
+        $latestPrice = 0;
+        $latestMargin = 0;
+        $latestSimulation = 0;
+        if ($latestPriceObject != null) {
+            $latestPrice = $latestPriceObject->price;
+            $latestMargin = $latestPriceObject->margin;
+        }
+
+        if (str_contains(url()->current(), 'api/')) {
+            return response()->json([
+                    'http_response' => 200,
+                    'status' => 1,
+                    'message_id' => 'Berhasil Mengambil Data Harga',
+                    'message_en' => 'Price Data retrieved successfully',
+                    'latest_price' => $latestPrice,
+                    'latest_margin' => $latestMargin,
+                    'data_count' => count($data),
+                    'price' => $data,
+                ]
+            );
+        } else {
+            if (str_contains(url()->current(), 'admin/')) {
+                return view('admin.price.manage')->
+                with(compact('data', 'latestPrice', 'latestMargin', 'latestSimulation'));
+            }
+        }
+    }
+
+    public function getLatest(){
+        $data = Price::all();
+    }
+
 }
