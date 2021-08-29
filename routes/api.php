@@ -28,7 +28,7 @@ Route::group([
     Route::get('/user-profile', 'CustomAuthController@me');    
 });
 
-Route::post('auth/register', 'StaffController@register');
+Route::post('auth/register', 'CustomAuthController@register');
 
 
 Route::group([

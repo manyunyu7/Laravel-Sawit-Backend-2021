@@ -37,6 +37,16 @@ class PriceController extends Controller
 
     public function store(Request $request)
     {
+        $validateComponent = [
+            "user_name" => "required",
+            "user_email" => "required",
+            "user_password" => "required",
+            "user_role" => "required",
+       ];
+       
+
+        $this->validate($request, $validateComponent);
+        
         $rules = [
             'price' => 'required|numeric',
             'margin' => 'required|numeric',

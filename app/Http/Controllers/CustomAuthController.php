@@ -1,22 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Validator;
 
 class CustomAuthController extends Controller
 {
-      /**
+    /**
      * Create a new AuthController instance.
      *
      * @return void
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
     /**
@@ -28,7 +30,7 @@ class CustomAuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = JWTAuth::attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -38,47 +40,57 @@ class CustomAuthController extends Controller
 
     public function register(Request $request)
     {
-            $validateComponent = [
-                "user_name" => "required",
-                "user_email" => "required",
-                "user_password" => "required",
-                "user_role" => "required",
-           ];
-           
-    
-            $this->validate($request, $validateComponent);
-    
-            $user = new User();
-            $user->name = $request->user_name;
-            $user->email = $request->user_email;
-            $user->contact = $request->user_contact;
-            $user->password = bcrypt($request->user_password);
-            $user->role = ($request->user_role);
-    
-    
-            if ($user->save()) {
-                if (Auth::user()->role == 1) {
-                    return back()->with(["success"=>"Berhasil Menambahkan User Baru"]);
-                }
-            } else {
-                return back()->with(["failed"=>"Gagal Menambahkan User Baru"]);
+        $rules = array(
+            'user_name' => 'required',
+            'user_email' => 'required',
+            'user_password' => 'required',
+            'user_contact' => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        
+        if ($validator->fails()) {
+            $messages = $validator->messages();
+            $errors = $messages->all();
+            return array(
+                "messages" => $messages,
+                "errors" => $errors
+            );
+            return $this->respondWithError($errors, 500);
+        }
+
+        $user = new User();
+        $user->name = $request->user_name;
+        $user->email = $request->user_email;
+        $user->contact = $request->user_contact;
+        $user->password = bcrypt($request->user_password);
+        $user->role = $request->user_role;
+
+
+        if ($user->save()) {
+            return array(
+                "success" => "Berhasil Menambahkan User Baru",
+            );
+        } else {
+            return back()->with(["failed" => "Gagal Menambahkan User Baru"]);
         }
 
         $credentials = request(['email', 'password']);
 
-        if (! $token = JWTAuth::attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         return $this->respondWithToken($token);
     }
 
-        /**
+    /**
      * Get the authenticated User.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function userProfile() {
+    public function userProfile()
+    {
         return response()->json(auth()->user());
     }
 
@@ -131,5 +143,4 @@ class CustomAuthController extends Controller
             'user' => auth()->user()
         ]);
     }
-
 }

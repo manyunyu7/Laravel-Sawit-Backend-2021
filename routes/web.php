@@ -25,8 +25,7 @@ Auth::routes();
 
 Route::redirect('/', '/login');
 
-Route::get('/registerz','IsengController@register');
-
+Route::get('/registerz','CustomAuthController@register');
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
