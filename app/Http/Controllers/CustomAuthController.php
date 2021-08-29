@@ -21,7 +21,7 @@ class CustomAuthController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
-    
+
     /**
      * Get a JWT via given credentials.
      *
@@ -50,15 +50,15 @@ class CustomAuthController extends Controller
         );
 
         $validator = Validator::make($request->all(), $rules);
-        
+
         if ($validator->fails()) {
             $messages = $validator->messages();
             $errors = $messages->all();
             return array(
+                "status_code" => 0,
                 "messages" => $messages,
                 "errors" => $errors
             );
-            return $this->respondWithError($errors, 500);
         }
 
         $user = new User();

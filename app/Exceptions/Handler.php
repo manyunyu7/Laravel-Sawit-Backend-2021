@@ -49,13 +49,15 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if ($request->is('api/*')) {
+
             if ($exception instanceof AuthenticationException) {
                 return response()->json([
                     'message' => 'Unauthenticated.',
                     'http_response' => 401,
-                    'status_code' => 0,
+                    'status_code' => 0 ,
                 ], 401);
             }
+
             if ($exception instanceof BodyTooLargeException) {
                 return response()->json([
                     'message' => 'The body is too large',
