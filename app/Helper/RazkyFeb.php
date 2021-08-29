@@ -11,7 +11,7 @@ class RazkyFeb
     public static function hello(){
         return "hello";
     }
-    
+
     public static function isAPI()
     {
         $url = url()->current();
@@ -20,6 +20,36 @@ class RazkyFeb
         }else{
             return false;
         }
+    }
+
+    public static function responseSuccessWithData(
+        $http_code,$status_code,$api_code,$message_id,$message_en,$res_data
+    ){
+        $response = [
+            'http_response' => $http_code,
+            'status_code' => $status_code,
+            'api_code' => $api_code,
+            'message_id' =>  $message_id,
+            'message_en' => $message_en,
+            'res_data' => $res_data,
+        ];
+
+        return response($response,$http_code);
+    }
+
+    public static function responseErrorWithData(
+        $http_code,$status_code,$api_code,$message_id,$message_en,$res_data
+    ){
+        $response = [
+            'http_response' => $http_code,
+            'status_code' => $status_code,
+            'api_code' => $api_code,
+            'message_id' =>  $message_id,
+            'message_en' => $message_en,
+            'res_data' => $res_data,
+        ];
+
+        return response($response,$http_code);
     }
 
     public static function checkApiKey($key)

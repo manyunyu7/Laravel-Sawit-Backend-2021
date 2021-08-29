@@ -139,9 +139,10 @@ class CustomAuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
+            'status_code' => 1,
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 0,
+            'expires_in' => auth('api')->factory()->getTTL() * 9999,
             'user' => auth()->user()
         ]);
     }
