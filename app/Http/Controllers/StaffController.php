@@ -6,6 +6,7 @@ use App\Helper\RazkyFeb;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
@@ -73,6 +74,7 @@ class StaffController extends Controller
 
     function update(Request $request)
     {
+//        return $request;
         $validateComponent = [
             "user_name" => "required",
             "user_email" => "required",
@@ -81,7 +83,10 @@ class StaffController extends Controller
 
         $this->validate($request, $validateComponent);
 
-        $user = User::findOrFail($request->id);
+        $user = User::find($request->id);
+        if ($request->id==null)
+            $user = Auth::user();
+
         $user->name = $request->user_name;
         $user->email = $request->user_email;
         $user->contact = $request->user_contact;
@@ -89,14 +94,34 @@ class StaffController extends Controller
         $user->role = ($request->user_role);
 
 
-        if ($user->save()) {
+        if ($user->update()) {
+            // IF REQUEST IS FROM API
+            if ($request->is('api/*'))
+                return RazkyFeb::responseSuccessWithData(
+                    200, 1, 200,
+                    "Berhasil Mengupdate Profil",
+                    "Success",
+                    $user,
+                );
+
+            // IF REQUEST IS FROM WEB
             if (Auth::user()->role == 1) {
                 return back()->with(["success" => "Berhasil Mengupdate Data User"]);
             }
         } else {
+            if ($request->is('api/*'))
+                return RazkyFeb::responseErrorWithData(
+                    400, 3, 400,
+                    "Gagal Mengupdate Profil",
+                    "Error",
+                    ""
+                );
+
             return back()->with(["failed" => "Gagal Mengupdate Data User"]);
         }
     }
+
+
 
     function updateProfilePhoto(Request $request)
     {
@@ -107,14 +132,8 @@ class StaffController extends Controller
 
         if ($request->hasFile('photo')) {
 
-            $file_path = public_path() . $user->photo_path;
-            if (file_exists($file_path)) {
-                try {
-                    unlink($file_path);
-                } catch (\Exception $e) {
-                    // Do Nothing on Profile Update
-                }
-            }
+            $file_path = public_path() . $user->photo;
+            RazkyFeb::removeFile($file_path);
 
             $file = $request->file('photo');
             $extension = $file->getClientOriginalExtension(); // you can also use file name
@@ -136,22 +155,84 @@ class StaffController extends Controller
                         Auth::user(),
                     );
 
-                return redirect($request->redirectTo)->with(["success"=>"Berhasil Mengupdate Profil"]);
+                return redirect($request->redirectTo)->with(["success" => "Berhasil Mengupdate Profil"]);
+            } else {
+                if ($request->is('api/*'))
+                    return RazkyFeb::responseErrorWithData(
+                        400, 3, 400,
+                        "Gagal Mengupdate Foto Profil, Silakan Lengkapi Foto",
+                        "Error",
+                        ""
+                    );
+
+                return redirect($request->redirectTo)->with(["errors" => "Gagal Mengupdate Profil"]);
             }
-
-
         } else {
             if ($request->is('api/*'))
                 return RazkyFeb::responseErrorWithData(
-                400, 3, 400,
-                "Berhasil Mengupdate Foto Profil",
-                "Success",
-                ""
-            );
+                    400, 3, 400,
+                    "Gagal Mengupdate Foto Profil",
+                    "Error",
+                    ""
+                );
 
-            return redirect($request->redirectTo)->with(["errors"=>"Gagal Mengupdate Profil"]);
+            return redirect($request->redirectTo)->with(["errors" => "Gagal Mengupdate Profil"]);
+        }
+    }
+
+    function updatePassword(Request $request)
+    {
+        // IF ID IS NOT NULL (MOST LIKELY FROM WEB)
+        $user = User::find($request->id);
+        if ($request->id==null){
+            $user = Auth::user(); // IF FROM API -> WITH TOKEN
         }
 
- 
+        $this->validate($request, [
+            'new_password' => 'required|min:6',
+            'old_password' => 'required|min:6'
+        ]);
+
+        $hasher = app('hash');
+        //If Password Sesuai
+        if (!$hasher->check($request->old_password, $user->password)) {
+            if ($request->is('api/*'))
+                return RazkyFeb::responseErrorWithData(
+                    400, 3, 400,
+                    "Password Lama Tidak Sesuai",
+                    "Old Password Didnt Match",
+                    ""
+                );
+
+            return redirect($request->redirectTo)->with(["errors" => "Password Lama Tidak Sesuai"]);
+
+        } else {
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+
+            if ($user) {
+                if ($request->is('api/*'))
+                    return RazkyFeb::responseSuccessWithData(
+                        200, 1, 200,
+                        "Berhasil Mengupdate Password",
+                        "Success",
+                        Auth::user(),
+                    );
+
+                return redirect($request->redirectTo)->with(["success" => "Berhasil Mengupdate Password"]);
+            } else {
+                if ($request->is('api/*'))
+                    return RazkyFeb::responseErrorWithData(
+                        400, 3, 400,
+                        "Gagal Mengupdate Password",
+                        "Error",
+                        ""
+                    );
+
+                return redirect($request->redirectTo)->with(["errors" => "Gagal Mengupdate Password"]);
+
+            }
+        }
     }
+
 }

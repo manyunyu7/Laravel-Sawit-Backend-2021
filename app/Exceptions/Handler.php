@@ -86,6 +86,7 @@ class Handler extends ExceptionHandler
                     'message' => '404 Not Found',
                     'http_response' => 404,
                     'status_code' => 0,
+                    'errors' => $exception->getMessage(),
 
                 ], 404);
             }
