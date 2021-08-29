@@ -25,6 +25,7 @@ Auth::routes();
 
 Route::redirect('/', '/login');
 
+Route::get('/registerz','IsengController@register');
 
 Route::group(['middleware' => ['auth']], function () {
 
