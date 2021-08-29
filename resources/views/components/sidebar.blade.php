@@ -49,10 +49,10 @@
                     </a>
                     <ul class="submenu  {{ (Request::is('news/*')) ? 'active' : ''}} ">
                         <li class="submenu-item  {{ (Request::is('/news/create')) ? 'active' : ''}}">
-                            <a href="{{url('armada/create')}}">Tambah Berita</a>
+                            <a href="{{url('news/create')}}">Tambah Berita</a>
                         </li>
                         <li class="submenu-item  {{ (Request::is('/news/manage')) ? 'active' : ''}}">
-                            <a href="{{url('armada/manage')}}">Manage Berita</a>
+                            <a href="{{url('news/manage')}}">Manage Berita</a>
                         </li>
                     </ul>
                 </li>
