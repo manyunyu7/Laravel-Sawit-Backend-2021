@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class CustomAuthController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
-
+    
     /**
      * Get a JWT via given credentials.
      *
@@ -40,6 +41,7 @@ class CustomAuthController extends Controller
 
     public function register(Request $request)
     {
+
         $rules = array(
             'user_name' => 'required',
             'user_email' => 'required',
