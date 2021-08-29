@@ -33,10 +33,16 @@ Route::post('auth/register', 'CustomAuthController@register');
 Route::group(['middleware' => ['auth:api']], function () {
     Route::prefix('user')->group(function () {
         Route::post('/update-photo', 'StaffController@updateProfilePhoto');
+        Route::post('/update-data', 'StaffController@update');
+        Route::post('/change-password', 'StaffController@updatePassword');
     });
 
     Route::prefix('armada')->group(function () {
         Route::get('/get', 'ArmadaController@get');
+    });
+
+    Route::prefix('news')->group(function () {
+        Route::get('/get', 'NewsController@get');
     });
 
     Route::post('save-user', 'UserController@saveUser');
