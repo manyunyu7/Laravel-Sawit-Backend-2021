@@ -96,13 +96,15 @@ class Handler extends ExceptionHandler
                 ], 405);
             }
 
-//            if ($exception instanceof QueryException) {
-//                return response()->json([
-//                    'message' => '422 Unprocessable Entity',
-//                    'http_response' => 422,
-//                    'status_code' => 0,
-//                ], 405);
-//            }
+            if ($exception instanceof QueryException) {
+                return response()->json([
+                    'message' => '422 Unprocessable Entity',
+                    'error' => $exception->getMessage(),
+                    'http_response' => 422,
+                    'status_code' => 0,
+                ], 405);
+            }
+
             return parent::render($request, $exception);
 
             return response()->json([
@@ -110,13 +112,8 @@ class Handler extends ExceptionHandler
                 'http_response' => 500,
                 'status_code' => 0,
             ], 404);
-
         } else {
             return parent::render($request, $exception);
         }
     }
-
-
-
-
 }
