@@ -125,8 +125,6 @@ class ArmadaController extends Controller
         $data->created_by = Auth::id();
         if ($request->hasFile('photo')) {
 
-
-
             $file = $request->file('photo');
             $extension = $file->getClientOriginalExtension(); // you can also use file name
             $fileName = time() . '.' . $extension;
@@ -145,5 +143,10 @@ class ArmadaController extends Controller
         } else {
             return back()->with(["error" => "Saving process failed"]);
         }
+    }
+
+    public function get(){
+        $datas = Truck::all();
+        return $datas;
     }
 }

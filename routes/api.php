@@ -34,6 +34,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::prefix('user')->group(function () {
         Route::post('/update-photo', 'StaffController@updateProfilePhoto');
     });
+
+    Route::prefix('armada')->group(function () {
+        Route::get('/get', 'ArmadaController@get');
+    });
+
     Route::post('save-user', 'UserController@saveUser');
     Route::put('edit-user', 'UserController@editUser');
 });
