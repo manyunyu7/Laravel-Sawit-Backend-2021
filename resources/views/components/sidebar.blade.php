@@ -41,6 +41,21 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item  has-sub {{ (Request::is('armada/*')) ? 'active' : ''}}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-stack"></i>
+                        <span>Manajemen Armada</span>
+                    </a>
+                    <ul class="submenu  {{ (Request::is('armada/*')) ? 'active' : ''}} ">
+                        <li class="submenu-item  {{ (Request::is('/armada/create')) ? 'active' : ''}}">
+                            <a href="{{url('armada/create')}}">Tambah Armada</a>
+                        </li>
+                        <li class="submenu-item  {{ (Request::is('/armada/manage')) ? 'active' : ''}}">
+                            <a href="{{url('armada/manage')}}">Manage Armada</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="sidebar-item  has-sub  {{ (Request::is('price/*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>
@@ -69,7 +84,7 @@
                         </li>
                     </ul>
                 </li>
-                
+
                 <li class="sidebar-item  has-sub  {{ (Request::is('material/*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>
@@ -84,7 +99,7 @@
                         </li>
                     </ul>
                 </li>
-           
+
 
                 <li class="sidebar-item  has-sub  {{ (Request::is('menu/*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
@@ -143,18 +158,18 @@
                         </li>
                     </ul>
                 </li>
-              
 
- 
+
+
                 <li class="sidebar-title">Logout</li>
                 <li class="sidebar-item  ">
-                    
+
                     <a href="{{url('/logout')}}" class="sidebar-link">
                         <i class="bi bi-life-preserver"></i>
                         <span>Logout</span>
                     </a>
                 </li>
-              
+
 
             </ul>
         </div>
