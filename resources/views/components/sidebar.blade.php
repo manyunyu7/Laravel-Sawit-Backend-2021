@@ -4,7 +4,8 @@
             <div class="d-flex justify-content-between">
                 <div class="logo d-flex">
                     <h1 class="mr-3">{{config('app.name')}}</h1>
-                    <a href="{{url('/')}}"><img src="{{asset('frontend/assets/images/logo/logo.png')}}" alt="Logo" srcset="" style="height: 70px !important;"></a>
+                    <a href="{{url('/')}}"><img src="{{asset('frontend/assets/images/logo/logo.png')}}" alt="Logo"
+                                                srcset="" style="height: 70px !important;"></a>
                 </div>
                 <div class="toggler">
                     <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
@@ -19,7 +20,7 @@
                 {{(Request::is('admin')) ? 'active' : ''}}
                 {{(Request::is('staff')) ? 'active' : ''}}
                 {{(Request::is('user')) ? 'active' : ''}}
-                ">
+                    ">
                     <a href="{{url('/home')}}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
@@ -37,6 +38,21 @@
                         </li>
                         <li class="submenu-item  {{ (Request::is('/admin/user/manage')) ? 'active' : ''}}">
                             <a href="{{url('/admin/user/manage')}}">Manage</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item  has-sub {{ (Request::is('news/*')) ? 'active' : ''}}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-stack"></i>
+                        <span>Berita</span>
+                    </a>
+                    <ul class="submenu  {{ (Request::is('news/*')) ? 'active' : ''}} ">
+                        <li class="submenu-item  {{ (Request::is('/news/create')) ? 'active' : ''}}">
+                            <a href="{{url('armada/create')}}">Tambah Berita</a>
+                        </li>
+                        <li class="submenu-item  {{ (Request::is('/news/manage')) ? 'active' : ''}}">
+                            <a href="{{url('armada/manage')}}">Manage Berita</a>
                         </li>
                     </ul>
                 </li>
@@ -158,7 +174,6 @@
                         </li>
                     </ul>
                 </li>
-
 
 
                 <li class="sidebar-title">Logout</li>
