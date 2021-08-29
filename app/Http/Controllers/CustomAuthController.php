@@ -16,7 +16,7 @@ class CustomAuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login','register']]);
     }
 
     /**
@@ -26,6 +26,44 @@ class CustomAuthController extends Controller
      */
     public function login()
     {
+        $credentials = request(['email', 'password']);
+
+        if (! $token = JWTAuth::attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->respondWithToken($token);
+    }
+
+
+    public function register(Request $request)
+    {
+            $validateComponent = [
+                "user_name" => "required",
+                "user_email" => "required",
+                "user_password" => "required",
+                "user_role" => "required",
+           ];
+           
+    
+            $this->validate($request, $validateComponent);
+    
+            $user = new User();
+            $user->name = $request->user_name;
+            $user->email = $request->user_email;
+            $user->contact = $request->user_contact;
+            $user->password = bcrypt($request->user_password);
+            $user->role = ($request->user_role);
+    
+    
+            if ($user->save()) {
+                if (Auth::user()->role == 1) {
+                    return back()->with(["success"=>"Berhasil Menambahkan User Baru"]);
+                }
+            } else {
+                return back()->with(["failed"=>"Gagal Menambahkan User Baru"]);
+        }
+
         $credentials = request(['email', 'password']);
 
         if (! $token = JWTAuth::attempt($credentials)) {

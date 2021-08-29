@@ -4,7 +4,8 @@ namespace Database\Seeders;
 
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use DB;
+use Illuminate\Support\Facades\DB as FacadesDB;
+
 class PriceSeeder extends Seeder
 {
     /**
@@ -14,7 +15,7 @@ class PriceSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('price')->insert([
+        FacadesDB::table('price')->insert([
             'price' => 2562.2,
             'margin' => 0.062,
             'created_at' => Carbon::create('2016-01-23 11:53:20'),
