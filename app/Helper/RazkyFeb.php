@@ -52,6 +52,17 @@ class RazkyFeb
         return response($response,$http_code);
     }
 
+    public static function removeFile($file_path){
+        // remove photo first
+        if (file_exists($file_path)) {
+            try {
+                unlink($file_path);
+            } catch (Exception $e) {
+                // Do Nothing on Exception
+            }
+        }
+    }
+
     public static function checkApiKey($key)
     {
         $check = DB::table('api_key')
