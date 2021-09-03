@@ -33,6 +33,13 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+    protected $appends = ['photo_path'];
+
+    function getPhotoPathAttribute(){
+        return asset($this->photo);
+    }
+
+
     /**
      * The attributes that should be cast to native types.
      *

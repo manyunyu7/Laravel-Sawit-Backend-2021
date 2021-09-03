@@ -32,15 +32,23 @@ class CustomAuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            $myresponse = array(
+                "status_code" => 0,
+                "messages" => "Username atau password tidak sesuai",
+                "messages_en" => "credential didnt match",
+                "errors" => "credential error"
+            );
+
+            return response()->json($myresponse, 401);
         }
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token,"");
     }
 
 
     public function register(Request $request)
     {
+
 
         $rules = array(
             'user_name' => 'required',
@@ -71,7 +79,9 @@ class CustomAuthController extends Controller
 
         if ($user->save()) {
             return array(
+                "status_code" =>1,
                 "success" => "Berhasil Menambahkan User Baru",
+                "message" => "Berhasil Menambahkan User Baru",
             );
         } else {
             return back()->with(["failed" => "Gagal Menambahkan User Baru"]);
@@ -83,7 +93,7 @@ class CustomAuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token,"");
     }
 
     /**
@@ -126,7 +136,7 @@ class CustomAuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth()->refresh(),"");
     }
 
     /**
@@ -136,10 +146,11 @@ class CustomAuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken($token,$message)
     {
         return response()->json([
             'status_code' => 1,
+            'message' => $message,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 9999,

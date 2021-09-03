@@ -36,6 +36,8 @@ class StaffController extends Controller
         if ($user->delete()) {
             if (Auth::user()->role == 1) {
                 return back()->with(["success" => "Berhasil Menghapus User $user->name"]);
+            } else {
+                return back()->with(["success" => "Berhasil Menghapus User $user->name"]);
             }
         } else {
             return back()->with(["error" => "Gagal Menghapus User Baru"]);
@@ -74,7 +76,7 @@ class StaffController extends Controller
 
     function update(Request $request)
     {
-//        return $request;
+        //        return $request;
         $validateComponent = [
             "user_name" => "required",
             "user_email" => "required",
@@ -84,13 +86,12 @@ class StaffController extends Controller
         $this->validate($request, $validateComponent);
 
         $user = User::find($request->id);
-        if ($request->id==null)
+        if ($request->id == null)
             $user = Auth::user();
 
         $user->name = $request->user_name;
         $user->email = $request->user_email;
         $user->contact = $request->user_contact;
-        $user->password = bcrypt($request->user_password);
         $user->role = ($request->user_role);
 
 
@@ -98,7 +99,9 @@ class StaffController extends Controller
             // IF REQUEST IS FROM API
             if ($request->is('api/*'))
                 return RazkyFeb::responseSuccessWithData(
-                    200, 1, 200,
+                    200,
+                    1,
+                    200,
                     "Berhasil Mengupdate Profil",
                     "Success",
                     $user,
@@ -111,7 +114,9 @@ class StaffController extends Controller
         } else {
             if ($request->is('api/*'))
                 return RazkyFeb::responseErrorWithData(
-                    400, 3, 400,
+                    400,
+                    3,
+                    400,
                     "Gagal Mengupdate Profil",
                     "Error",
                     ""
@@ -149,7 +154,9 @@ class StaffController extends Controller
             if ($user->save()) {
                 if ($request->is('api/*'))
                     return RazkyFeb::responseSuccessWithData(
-                        200, 1, 200,
+                        200,
+                        1,
+                        200,
                         "Berhasil Mengupdate Foto Profil",
                         "Success",
                         Auth::user(),
@@ -159,8 +166,10 @@ class StaffController extends Controller
             } else {
                 if ($request->is('api/*'))
                     return RazkyFeb::responseErrorWithData(
-                        400, 3, 400,
-                        "Gagal Mengupdate Foto Profil, Silakan Lengkapi Foto",
+                        400,
+                        3,
+                        400,
+                        "Gagal Mengupdate Foto Profil",
                         "Error",
                         ""
                     );
@@ -170,10 +179,12 @@ class StaffController extends Controller
         } else {
             if ($request->is('api/*'))
                 return RazkyFeb::responseErrorWithData(
-                    400, 3, 400,
-                    "Gagal Mengupdate Foto Profil",
+                    400,
+                    3,
+                    400,
+                    "Gagal Mengupdate Foto Profil, Silakan Lengkapi Foto",
                     "Error",
-                    ""
+                    $request->all()
                 );
 
             return redirect($request->redirectTo)->with(["errors" => "Gagal Mengupdate Profil"]);
@@ -184,7 +195,7 @@ class StaffController extends Controller
     {
         // IF ID IS NOT NULL (MOST LIKELY FROM WEB)
         $user = User::find($request->id);
-        if ($request->id==null){
+        if ($request->id == null) {
             $user = Auth::user(); // IF FROM API -> WITH TOKEN
         }
 
@@ -198,14 +209,15 @@ class StaffController extends Controller
         if (!$hasher->check($request->old_password, $user->password)) {
             if ($request->is('api/*'))
                 return RazkyFeb::responseErrorWithData(
-                    400, 3, 400,
+                    400,
+                    3,
+                    400,
                     "Password Lama Tidak Sesuai",
                     "Old Password Didnt Match",
                     ""
                 );
 
             return redirect($request->redirectTo)->with(["errors" => "Password Lama Tidak Sesuai"]);
-
         } else {
             $user->password = Hash::make($request->new_password);
             $user->save();
@@ -213,7 +225,9 @@ class StaffController extends Controller
             if ($user) {
                 if ($request->is('api/*'))
                     return RazkyFeb::responseSuccessWithData(
-                        200, 1, 200,
+                        200,
+                        1,
+                        200,
                         "Berhasil Mengupdate Password",
                         "Success",
                         Auth::user(),
@@ -223,16 +237,16 @@ class StaffController extends Controller
             } else {
                 if ($request->is('api/*'))
                     return RazkyFeb::responseErrorWithData(
-                        400, 3, 400,
+                        400,
+                        3,
+                        400,
                         "Gagal Mengupdate Password",
                         "Error",
                         ""
                     );
 
                 return redirect($request->redirectTo)->with(["errors" => "Gagal Mengupdate Password"]);
-
             }
         }
     }
-
 }

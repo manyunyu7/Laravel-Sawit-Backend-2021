@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class PriceController extends Controller
 {
-     /**
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -31,22 +31,15 @@ class PriceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
 
     public function store(Request $request)
     {
-        $validateComponent = [
-            "user_name" => "required",
-            "user_email" => "required",
-            "user_password" => "required",
-            "user_role" => "required",
-       ];
-       
 
-        $this->validate($request, $validateComponent);
-        
+
+
         $rules = [
             'price' => 'required|numeric',
             'margin' => 'required|numeric',
@@ -72,7 +65,7 @@ class PriceController extends Controller
                     'message_en' => 'Price Updated Successfully',
                 ]);
             } else {
-                return redirect("$request->redirectTo")->with(['success' => "Harga Sawit Berhasil Diperbaharui"]);
+                return back()->with(['success' => "Harga Sawit Berhasil Diperbaharui"]);
             }
         } else {
             if (str_contains(url()->current(), 'api/')) {
@@ -83,7 +76,7 @@ class PriceController extends Controller
                     'message' => 'Price Updated Failed',
                 ]);
             } else {
-                return redirect("$request->redirectTo")->with(['error' => "Harga Sawit Gagal Diperbaharui"]);
+                return back()->with(['error' => "Harga Sawit Gagal Diperbaharui"]);
             }
         }
     }
@@ -91,7 +84,7 @@ class PriceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -102,7 +95,7 @@ class PriceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -114,19 +107,24 @@ class PriceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id,$request)
+    public function destroy($id, Request $request)
     {
         $data = Price::findOrFail($id);
 
-        if ($data->delete()) {
-            return redirect($request->redirectTo)->with(["success" => "Data deleted successfully"]);
-        } else {
-            return redirect($request->redirectTo)->with(["error" => "Data deletion fail"]);
+        $returnTo = "/price/manage";
+
+        if ($request->redirectTo != null) {
+            $returnTo = $request->redirectTo;
         }
 
+        if ($data->delete()) {
+            return redirect($returnTo)->with(["success" => "Data deleted successfully"]);
+        } else {
+            return redirect($returnTo)->with(["error" => "Data deletion fail"]);
+        }
     }
 
     public function getAll(Request $request)
@@ -142,27 +140,18 @@ class PriceController extends Controller
         }
 
         if (str_contains(url()->current(), 'api/')) {
-            return response()->json([
-                    'http_response' => 200,
-                    'status' => 1,
-                    'message_id' => 'Berhasil Mengambil Data Harga',
-                    'message_en' => 'Price Data retrieved successfully',
-                    'latest_price' => $latestPrice,
-                    'latest_margin' => $latestMargin,
-                    'data_count' => count($data),
-                    'price' => $data,
-                ]
+            return response()->json(
+                $data
             );
         } else {
             if (str_contains(url()->current(), 'admin/')) {
-                return view('admin.price.manage')->
-                with(compact('data', 'latestPrice', 'latestMargin', 'latestSimulation'));
+                return view('admin.price.manage')->with(compact('data', 'latestPrice', 'latestMargin', 'latestSimulation'));
             }
         }
     }
 
-    public function getLatest(){
+    public function getLatest()
+    {
         $data = Price::all();
     }
-
 }

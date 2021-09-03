@@ -4,6 +4,7 @@ namespace App\Helper;
 
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class RazkyFeb
 {
@@ -54,13 +55,14 @@ class RazkyFeb
 
     public static function removeFile($file_path){
         // remove photo first
-        if (file_exists($file_path)) {
-            try {
-                unlink($file_path);
-            } catch (Exception $e) {
-                // Do Nothing on Exception
-            }
-        }
+        File::delete($file_path);
+        // if (file_exists($file_path)) {
+        //     try {
+        //         unlink($file_path);
+        //     } catch (Exception $e) {
+        //         // Do Nothing on Exception
+        //     }
+        // }
     }
 
     public static function checkApiKey($key)
