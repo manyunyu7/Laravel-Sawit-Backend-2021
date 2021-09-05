@@ -46,7 +46,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     });
 
 
-
     Route::post('save-user', 'UserController@saveUser');
     Route::put('edit-user', 'UserController@editUser');
 });
@@ -56,5 +55,9 @@ Route::prefix('price')->group(function () {
 
 Route::prefix('news')->group(function () {
     Route::get('/get', 'NewsController@get');
+});
+
+Route::prefix('user')->group(function () {
+    Route::get('{id}/request-sell', 'RequestSellController@getByUser');
 });
 
