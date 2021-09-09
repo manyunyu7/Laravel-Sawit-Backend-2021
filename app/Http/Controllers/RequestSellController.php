@@ -18,7 +18,6 @@ class RequestSellController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'additional_contact' => 'required',
             'long' => 'required',
             'lat' => 'required',
             'est_weight' => 'required|numeric',
@@ -53,7 +52,6 @@ class RequestSellController extends Controller
             $file_name = $request->user . "_" . uniqid() . $files->getClientOriginalName();
             if ($files->move($destinationPath, $file_name))
                 $dataFile[] = $destinationPath . $file_name;
-
         }
 
 
@@ -74,12 +72,21 @@ class RequestSellController extends Controller
 
         if ($data->save()) {
 
+            $counter = 1;
             foreach ($dataFile as $itemPhoto) {
+
                 //Save Image into MappingRequestSellPhoto;
                 $mapping = new MappingRequestSellPhoto();
                 $mapping->request_sell_id = $data->id;
                 $mapping->path = $itemPhoto;
                 $mapping->save();
+
+                //Save First PHOTO AS SAMPUL
+                if ($counter==1){
+                    $objectRS = $data;
+                    $data->photo = $itemPhoto;
+                    $data->save();
+                }
             }
 
 
@@ -117,19 +124,13 @@ class RequestSellController extends Controller
             $perPage = 10;
         }
 
-        $datas = RequestSell::where('user_id', '=', $id)->simplePaginate($perPage);
+        $datas = RequestSell::where('user_id', '=', $id)->orderBy('id','desc')->simplePaginate($perPage);
         // if request doesnt containt ?paginate=true
         // then show all data directly
-
-        $tesBillion = array();
         if ($request->is_paginate == null) {
-            $datas = RequestSell::where('user_id', '=', $id)->get();
+            $datas = RequestSell::where('user_id', '=', $id)->orderBy('id','desc')->get();
         }
 
-        for ($i = 0; $i < 10000; $i++) {
-            array_push($tesBillion, $datas);
-        }
-
-        return $tesBillion;
+        return $datas;
     }
 }
