@@ -54,6 +54,7 @@ class NewsController extends Controller
         $data = new News();
         $data->title = $request->title;
         $data->author = $request->author;
+        $data->type = $request->type;
         $data->content = $request->news_content;
         if ($request->hasFile('photo')) {
 
