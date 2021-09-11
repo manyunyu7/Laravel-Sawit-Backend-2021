@@ -1,0 +1,17 @@
+
+            case "3" :
+                return "Menunggu Diproses";
+                break;
+            case "2" :
+                return "Diproses";
+                break;
+            case "4" :
+                return "Dalam Penjemputan";
+                break;
+            case "1" :
+                return "Sukses";
+                break;
+            case "0" :
+                return "Dibatalkan";
+                break;
+

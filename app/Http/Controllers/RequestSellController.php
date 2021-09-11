@@ -82,7 +82,7 @@ class RequestSellController extends Controller
                 $mapping->save();
 
                 //Save First PHOTO AS SAMPUL
-                if ($counter==1){
+                if ($counter == 1) {
                     $objectRS = $data;
                     $data->photo = $itemPhoto;
                     $data->save();
@@ -119,18 +119,55 @@ class RequestSellController extends Controller
 
     public function getByUser($id, Request $request)
     {
+        $status = $request->status;
         $perPage = $request->per_page;
         if ($request->per_page == null) {
             $perPage = 10;
         }
 
-        $datas = RequestSell::where('user_id', '=', $id)->orderBy('id','desc')->simplePaginate($perPage);
+        // Check if id is all
+        if ($id == "all") {
+            // Check if status filter is not null
+            if ($status != null) {
+                $datas =
+                    RequestSell::
+                    where('status', '=', $status)
+                        ->orderBy('id', 'desc')
+                        ->simplePaginate($perPage);
+            } else {
+                //will executed if filter is null
+                $datas = RequestSell::orderBy('id', 'desc')->simplePaginate($perPage);
+            }
+        } else {
+            if ($status != null) {
+                $datas =
+                    RequestSell::
+                    where('status', '=', $status)
+                        ->where('user_id', '=', $id)
+                        ->where('status','=',$status)
+                        ->orderBy('id', 'desc')
+                        ->simplePaginate($perPage);
+            } else {
+                $datas = RequestSell::where('user_id', '=', $id)
+                    ->orderBy('id', 'desc')->simplePaginate($perPage);
+            }
+
+        }
+
         // if request doesnt containt ?paginate=true
         // then show all data directly
         if ($request->is_paginate == null) {
-            $datas = RequestSell::where('user_id', '=', $id)->orderBy('id','desc')->get();
+
+            // Check if id is all
+            if ($id == "all") {
+                $datas = RequestSell::orderBy('id', 'desc')->get();
+            } else {
+                $datas = RequestSell::where('user_id', '=', $id)->orderBy('id', 'desc')->get();
+            }
+
         }
 
         return $datas;
     }
+
 }

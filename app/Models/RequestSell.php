@@ -10,12 +10,17 @@ class RequestSell extends Model
     use HasFactory;
 
     protected $appends = [
-        'photo_path',
+        'photo_path','photo_list',
         'driver_name', 'status_desc','staff_name','user_name','user_photo'];
 
     function getPhotoPathAttribute()
     {
         return asset($this->photo);
+    }
+
+    function getPhotoListAttribute()
+    {
+        return MappingRSPhoto::where('request_sell_id','=',$this->id)->get();
     }
 
     function getDriverNameAttribute()
