@@ -48,6 +48,7 @@
                                             <th data-sortable="">No</th>
                                             <th data-sortable="">Foto</th>
                                             <th data-sortable="">Judul Berita</th>
+                                            <th data-sortable="">Tipe</th>
                                             <th data-sortable="">Penulis</th>
                                             <th data-sortable="">Diinput Pada</th>
                                             <th data-sortable="">Edit</th>
@@ -63,6 +64,7 @@
                                                          src='{{asset("$data->photo")}}' alt="">
                                                 </td>
                                                 <td>{{ $data->title }}</td>
+                                                <td>{{ $data->type}}</td>
                                                 <td>{{ $data->author }}</td>
 
                                                 <td>{{ $data->created_at }}</td>
