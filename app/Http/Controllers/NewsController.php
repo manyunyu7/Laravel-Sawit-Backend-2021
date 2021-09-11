@@ -46,7 +46,7 @@ class NewsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      */
     public function store(Request $request)
     {
@@ -78,9 +78,9 @@ class NewsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      */
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
 //        dd($request->all());
         $data = News::findOrFail($id);
@@ -113,7 +113,8 @@ class NewsController extends Controller
      * @param @id of armada
      * return json or view
      */
-    public function delete(Request $request,$id){
+    public function delete(Request $request, $id)
+    {
         $data = News::findOrFail($id);
 
         if ($data->delete()) {
@@ -124,8 +125,8 @@ class NewsController extends Controller
                     "Success",
                     Auth::user(),
                 );
-            return back()->with(["success"=>"Berhasil Menghapus Data"]);
-        }else{
+            return back()->with(["success" => "Berhasil Menghapus Data"]);
+        } else {
             if ($request->is('api/*'))
                 return RazkyFeb::responseErrorWithData(
                     400, 3, 400,
@@ -133,14 +134,18 @@ class NewsController extends Controller
                     "Success",
                     ""
                 );
-            return back()->with(["errors"=>"Gagal Menghapus Data"]);
+            return back()->with(["errors" => "Gagal Menghapus Data"]);
         }
 
     }
 
 
-    public function get(){
+    public function get(Request $request)
+    {
         $datas = News::all();
+        if ($request->type != "") {
+            $datas = News::where('type', '=', $request->type)->get();
+        }
         return $datas;
     }
 
