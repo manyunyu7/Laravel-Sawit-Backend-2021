@@ -53,6 +53,13 @@
                                        placeholder="Sumber Berita">
                             </div>
 
+                            <div class="form-group">
+                                <label for="">Type</label>
+                                <input type="text"
+                                       class="form-control" name="type" id="" aria-describedby="helpId" placeholder="">
+                                <small id="helpId" class="form-text text-muted">Type</small>
+                            </div>
+
 
                             <div class="form-group">
                                 <label for="">Konten Berita</label>
