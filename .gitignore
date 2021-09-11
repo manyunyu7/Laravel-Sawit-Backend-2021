@@ -1,8 +1,8 @@
 /node_modules
 /public/hot
 /public/storage
-/public/web_files/request_sell
-/public/web_files/news
+/public/web_files/request_sell/*
+/public/web_files/news/*
 /storage/*.key
 /vendor
 .env
