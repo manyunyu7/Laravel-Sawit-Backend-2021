@@ -74,6 +74,12 @@
                                 <input name="photo" class="form-control" type="file" id="formFile">
                             </div>
 
+                            <div class="form-group">
+                                <label for="basicInput">Type</label>
+                                <input type="text" name="type" required class="form-control"
+                                       value="{{ old('type',$data->type) }}"
+                                       placeholder="Type">
+                            </div>
 
                         </div>
 
