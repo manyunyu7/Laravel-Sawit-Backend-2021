@@ -4,13 +4,45 @@ namespace App\Http\Controllers;
 
 use App\Helper\RazkyFeb;
 use App\Models\MappingRequestSellPhoto;
+use App\Models\News;
 use App\Models\Price;
 use App\Models\RequestSell;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RequestSellController extends Controller
 {
+
+    /**
+     * Show the form for managing existing resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function viewManage()
+    {
+        $datas = RequestSell::all();
+        return view('requestsell.manage')->with(compact('datas'));
+    }
+
+    /**
+     * Show the edit form for editing armada
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function viewDetail($id)
+    {
+        $data = RequestSell::findOrFail($id);
+        $user_data = User::findOrFail($data->user_id);
+        $driver_data = User::find($data->driver_id);
+        $staff_data = User::find($data->staff_id);
+
+        $retVal = compact('data','user_data',
+            'staff_data','driver_data');
+//        return $retVal;
+        return view('requestsell.edit')->with($retVal);
+    }
+
     /**
      * store the request sell
      *

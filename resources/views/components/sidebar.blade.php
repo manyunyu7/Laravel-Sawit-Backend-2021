@@ -42,6 +42,23 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-title">Penjualan Sawit</li>
+
+                <li class="sidebar-item  has-sub {{ (Request::is('rs/*')) ? 'active' : ''}}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-stack"></i>
+                        <span>Permintaan Jual</span>
+                    </a>
+                    <ul class="submenu  {{ (Request::is('rs/*')) ? 'active' : ''}} ">
+                        <li class="submenu-item  {{ (Request::is('/news/create')) ? 'active' : ''}}">
+                            <a href="{{url('news/create')}}">Tambah Berita</a>
+                        </li>
+                        <li class="submenu-item  {{ (Request::is('/rs/manage')) ? 'active' : ''}}">
+                            <a href="{{url('rs/manage')}}">Semua Request</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="sidebar-item  has-sub {{ (Request::is('news/*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>
@@ -147,6 +164,8 @@
                         </li>
                     </ul>
                 </li>
+
+
 
                 <li class="sidebar-item  has-sub  {{ (Request::is('inbound*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
