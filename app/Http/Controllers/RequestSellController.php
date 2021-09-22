@@ -10,6 +10,7 @@ use App\Models\RequestSell;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RequestSellController extends Controller
 {
@@ -37,10 +38,58 @@ class RequestSellController extends Controller
         $driver_data = User::find($data->driver_id);
         $staff_data = User::find($data->staff_id);
 
-        $retVal = compact('data','user_data',
-            'staff_data','driver_data');
+        $staffs = User::where('role', '=', 2)->get();
+
+        $price = DB::table('price')->latest('created_at')->first();
+
+        $retVal = compact('data', 'user_data',
+            'staff_data', 'driver_data', 'price', 'staffs');
 //        return $retVal;
         return view('requestsell.edit')->with($retVal);
+    }
+
+
+    public function changeDriver(Request $request)
+    {
+        $data = RequestSell::findOrFail($request->id);
+        $staff_data = User::find($request->staff_id);
+        if ($staff_data == null) {
+            return back()->with(["error" => "Gagal Mengganti Staff, Data Tidak Ditemukan"]);
+        }
+        $data->driver_id = $request->staff_id;
+
+        if ($data->save()) {
+            return back()->with(["success" => "Berhasil Mengganti Staff"]);
+        } else {
+            return back()->with(["error" => "Gagal Mengganti Staff"]);
+        }
+    }
+
+    public function changeStatus(Request $request)
+    {
+        $data = RequestSell::findOrFail($request->id);
+        $data->status = $request->status;
+        if ($data->save()) {
+            return back()->with(["success" => "Berhasil Mengganti Status"]);
+        } else {
+            return back()->with(["error" => "Gagal Mengganti Status"]);
+        }
+    }
+
+    public function changeStaff(Request $request)
+    {
+        $data = RequestSell::findOrFail($request->id);
+        $staff_data = User::find($request->staff_id);
+        if ($staff_data == null) {
+            return back()->with(["error" => "Gagal Mengganti Staff, Data Tidak Ditemukan"]);
+        }
+        $data->staff_id = $request->staff_id;
+
+        if ($data->save()) {
+            return back()->with(["success" => "Berhasil Mengganti Staff"]);
+        } else {
+            return back()->with(["error" => "Gagal Mengganti Staff"]);
+        }
     }
 
     /**
@@ -176,7 +225,7 @@ class RequestSellController extends Controller
                     RequestSell::
                     where('status', '=', $status)
                         ->where('user_id', '=', $id)
-                        ->where('status','=',$status)
+                        ->where('status', '=', $status)
                         ->orderBy('id', 'desc')
                         ->simplePaginate($perPage);
             } else {

@@ -26,11 +26,7 @@
         @include('components.message')
     </section>
 
-
     <section class="section">
-
-
-
         <div class="card">
             <div class="card-header">
                 <h4 class="">Foto Permintaan Penjualan</h4>
@@ -103,7 +99,7 @@
                                 </div>
                             </div>
                             <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Margin TBS Saat Request</h6>
+                                <h6 class="text-muted font-semibold">Margin Jual Saat Request</h6>
                                 <h6 class="font-extrabold mb-0">{{$data->est_margin*100}} % </h6>
                             </div>
                         </div>
@@ -121,8 +117,8 @@
                                 </div>
                             </div>
                             <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Harga Jual Saat Request</h6>
-                                <h6 class="font-extrabold mb-0">{{$data->est_margin*100}} % </h6>
+                                <h6 class="text-muted font-semibold">Harga Jual Saat Ini<br></h6>
+                                <h6 class="font-extrabold mb-0">{{$price->price}} % </h6>
                             </div>
                         </div>
                     </div>
@@ -139,8 +135,8 @@
                                 </div>
                             </div>
                             <div class="col-md-8">
-                                <h6 class="text-muted font-semibold">Harga Jual Saat Ini</h6>
-                                <h6 class="font-extrabold mb-0">{{$data->est_margin*100}} % </h6>
+                                <h6 class="text-muted font-semibold">Margin TBS Saat Ini<br></h6>
+                                <h6 class="font-extrabold mb-0">{{$price->margin*100}} % </h6>
                             </div>
                         </div>
                     </div>
@@ -152,19 +148,22 @@
 
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">Data User</h5>
+                <h3>Data User</h3>
             </div>
             <div class="card-body">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a class="nav-link active" id="owner-tab"
-                           data-bs-toggle="tab" href="#owner" role="tab" aria-controls="home" aria-selected="true">Pemilik Kebun</a>
+                           data-bs-toggle="tab" href="#owner" role="tab" aria-controls="home" aria-selected="true">Pemilik
+                            Kebun</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="driver-tab" data-bs-toggle="tab" href="#driver" role="tab" aria-controls="driver" aria-selected="false">Driver</a>
+                        <a class="nav-link" id="driver-tab" data-bs-toggle="tab" href="#driver" role="tab"
+                           aria-controls="driver" aria-selected="false">Driver</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="staff-tab" data-bs-toggle="tab" href="#staff" role="tab" aria-controls="staff" aria-selected="false">Staff</a>
+                        <a class="nav-link" id="staff-tab" data-bs-toggle="tab" href="#staff" role="tab"
+                           aria-controls="staff" aria-selected="false">Staff</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -181,37 +180,103 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="driver" role="tabpanel" aria-labelledby="driver-tab">
-                        Integer interdum diam eleifend metus lacinia, quis gravida eros mollis.
-                        Fusce non sapien
-                        sit amet magna dapibus
-                        ultrices. Morbi tincidunt magna ex, eget faucibus sapien bibendum non. Duis
-                        a mauris ex.
-                        Ut finibus risus sed massa
-                        mattis porta. Aliquam sagittis massa et purus efficitur ultricies. Integer
-                        pretium dolor
-                        at sapien laoreet ultricies.
-                        Fusce congue et lorem id convallis. Nulla volutpat tellus nec molestie
-                        finibus. In nec
-                        odio tincidunt eros finibus
-                        ullamcorper. Ut sodales, dui nec posuere finibus, nisl sem aliquam metus, eu
-                        accumsan
-                        lacus felis at odio. Sed lacus
-                        quam, convallis quis condimentum ut, accumsan congue massa. Pellentesque et
-                        quam vel
-                        massa pretium ullamcorper vitae eu
-                        tortor.
-                    </div>
                     <div class="tab-pane fade" id="staff" role="tabpanel" aria-labelledby="staff-tab">
-                        <p class="mt-2">Duis ultrices purus non eros fermentum hendrerit. Aenean
-                            ornare interdum
-                            viverra. Sed ut odio velit. Aenean eu diam
-                            dictum nibh rhoncus mattis quis ac risus. Vivamus eu congue ipsum.
-                            Maecenas id
-                            sollicitudin ex. Cras in ex vestibulum,
-                            posuere orci at, sollicitudin purus. Morbi mollis elementum enim, in
-                            cursus sem
-                            placerat ut.</p>
+                        <div class="border p-3">
+                            @if($staff_data!=null)
+                                <div class="avatar avatar-xl mb-3">
+                                    <img src="{{$data->user_photo}}" alt="" srcset="">
+                                </div>
+                                <ul>
+                                    <li class="mt-3">Nama : {{$staff_data->name}}</li>
+                                    <li>Email : {{$staff_data->email}}</li>
+                                    <li>Contact : {{$staff_data->contact}}</li>
+                                    <li>Kontak Darurat : {{$staff_data->contact}}</li>
+                                </ul>
+
+                            @else
+                                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <strong>Belum Ada Staff</strong>
+                                </div>
+
+                                <script>
+                                    $(".alert").alert();
+                                </script>
+                            @endif
+
+                            <form action="{{url('rs/change-staff')}}" method="post">
+                                @csrf
+                                <div class="form-group">
+                                    <input hidden name="id" value="{{$data->id}}">
+                                    <label for="">Pindah Tugaskan Ke : (Pilih Staff Baru)</label>
+                                    <select class="form-control form-select" name="staff_id">
+                                        <option value="">Pilih Staff</option>
+                                        @forelse($staffs as $item)
+                                            <option value="{{$item->id}}"> {{$item->name}}</option>
+                                        @empty
+
+                                        @endforelse
+                                    </select>
+                                    <button
+                                        id="btn-save-change-staff"
+                                        type="submit"
+                                        class="btn btn-outline-primary mt-4">Simpan Perubahan
+                                    </button>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="driver" role="tabpanel" aria-labelledby="driver-tab">
+                        <div class="border p-3">
+                            @if($driver_data!=null)
+                                <div class="avatar avatar-xl mb-3">
+                                    <img src="{{$driver_data->user_photo}}" alt="" srcset="">
+                                </div>
+                                <ul>
+                                    <li class="mt-3">Nama : {{$driver_data->name}}</li>
+                                    <li>Email : {{$driver_data->email}}</li>
+                                    <li>Contact : {{$driver_data->contact}}</li>
+                                    <li>Kontak Darurat : {{$staff_data->contact}}</li>
+                                </ul>
+                            @else
+                                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <strong>Belum Ada Driver</strong>
+                                </div>
+
+                                <script>
+                                    $(".alert").alert();
+                                </script>
+                            @endif
+
+                            <form action="{{url('rs/change-driver')}}" method="post">
+                                @csrf
+                                <div class="form-group">
+                                    <input hidden name="id" value="{{$data->id}}">
+                                    <label for="">Pindah Tugaskan Ke : (Pilih Driver Baru)</label>
+                                    <select class="form-control form-select" name="staff_id">
+                                        <option value="">Pilih Driver/option>
+                                        @forelse($staffs as $item)
+                                            <option value="{{$item->id}}"> {{$item->name}}</option>
+                                        @empty
+
+                                        @endforelse
+                                    </select>
+                                    <button
+                                        id="btn-save-change-staff"
+                                        type="submit"
+                                        class="btn btn-outline-primary mt-4">Simpan Perubahan
+                                    </button>
+                                </div>
+                            </form>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -219,12 +284,48 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="">Detail Penjualan Sawit</h3>
+                <h3 class="">Detail Permintaan Jual Sawit</h3>
             </div>
 
             <div class="card-body">
+                <h5>Status Saat Ini : {{$data->status_desc}}</h5>
+
+                <form action="{{ url('rs/change-status') }}" enctype="multipart/form-data" method="post">
+                    @csrf
+                    <input hidden name="id" value="{{$data->id}}">
+                    <div class="form-group">
+                        <label for="">Ubah Status</label>
+                        <select required class="form-control form-select" name="status" id="">
+                            <option>Pilih Status Baru</option>
+                            <option value="3">Menunggu Diproses</option>
+                            <option value="2">Diproses</option>
+                            <option value="4">Dalam Penjemputan</option>
+                            <option value="1">Sukses</option>
+                            <option value="0">Dibatalkan</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn mt-1 mb-3 btn-outline-primary">
+                        Simpan Perubahan Status
+                    </button>
+
+                </form>
+
+
                 <form action="{{ url('news/store') }}" enctype="multipart/form-data" method="post">
                     @csrf
+
+                    <div class="border p-3">
+                        <h4>Perkiraan Harga Jual</h4>
+                        <ul class="text-dark">
+                            <li>Berat Sawit : {{$data->est_weight}} Kg</li>
+                            <li>Harga Saat Request Dilakukan : Rp. {{number_format(($data->est_price) *
+                                ($data->est_weight - ($data->est_weight*$data->est_margin)),2,',','.')}}</li>
+                            <li>Harga Terbaru : Rp. {{number_format(($price->price) *
+                                ($data->est_weight - ($data->est_weight*$price->margin)),2,',','.')}}</li>
+
+                        </ul>
+                    </div>
 
                     <div class="border p-3">
                         <ul class="text-dark">
@@ -234,10 +335,6 @@
                             <li>Alamat Penjualan : <br> {{$data->address}}</li>
                         </ul>
                     </div>
-
-
-
-
 
                 </form>
 
@@ -275,32 +372,6 @@
                     }));
                 }
             }
-        });
-    </script>
-    <script>
-        var el = document.getElementById('formFile');
-        el.onchange = function () {
-            var fileReader = new FileReader();
-            fileReader.readAsDataURL(document.getElementById("formFile").files[0])
-            fileReader.onload = function (oFREvent) {
-                document.getElementById("imgPreview").src = oFREvent.target.result;
-            };
-        }
-
-
-        $(document).ready(function () {
-            $.myfunction = function () {
-                $("#previewName").text($("#inputTitle").val());
-                var title = $.trim($("#inputTitle").val())
-                if (title == "") {
-                    $("#previewName").text("Judul")
-                }
-            };
-
-            $("#inputTitle").keyup(function () {
-                $.myfunction();
-            });
-
         });
     </script>
 @endpush

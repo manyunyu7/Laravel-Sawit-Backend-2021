@@ -83,6 +83,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('{id}/detail', "$cr@viewDetail");
         Route::post('{id}/update', "$cr@update");
         Route::get('{id}/delete', "$cr@delete");
+        Route::post('change-driver', "$cr@changeDriver");
+        Route::post('change-staff', "$cr@changeStaff");
+        Route::post('change-status', "$cr@changeStatus");
         Route::get('manage', "$cr@viewManage");
     });
 
