@@ -162,6 +162,10 @@
                            aria-controls="driver" aria-selected="false">Driver</a>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="truck-tab" data-bs-toggle="tab" href="#truck" role="tab"
+                           aria-controls="driver" aria-selected="false">Truck</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <a class="nav-link" id="staff-tab" data-bs-toggle="tab" href="#staff" role="tab"
                            aria-controls="staff" aria-selected="false">Staff</a>
                     </li>
@@ -240,7 +244,7 @@
                                     <li class="mt-3">Nama : {{$driver_data->name}}</li>
                                     <li>Email : {{$driver_data->email}}</li>
                                     <li>Contact : {{$driver_data->contact}}</li>
-                                    <li>Kontak Darurat : {{$staff_data->contact}}</li>
+                                    <li>Kontak Darurat : {{$driver_data->contact}}</li>
                                 </ul>
                             @else
                                 <div class="alert alert-primary alert-dismissible fade show" role="alert">
@@ -261,7 +265,7 @@
                                     <input hidden name="id" value="{{$data->id}}">
                                     <label for="">Pindah Tugaskan Ke : (Pilih Driver Baru)</label>
                                     <select class="form-control form-select" name="staff_id">
-                                        <option value="">Pilih Driver/option>
+                                        <option value="">Pilih Driver</option>
                                         @forelse($staffs as $item)
                                             <option value="{{$item->id}}"> {{$item->name}}</option>
                                         @empty
@@ -278,6 +282,53 @@
 
                         </div>
                     </div>
+
+                    <div class="tab-pane fade" id="truck" role="tabpanel" aria-labelledby="truck-tab">
+                        <div class="border p-3">
+                            @if($data->truck!=null)
+                                    <img height="300px" style="border-radius: 20px" src="{{$data->truck->photo}}" alt="" srcset="">
+                                <ul>
+                                    <li class="mt-3">Nama : {{$data->truck->name}}</li>
+                                    <li>Nopol : {{$data->truck->nopol}}</li>
+                                </ul>
+                            @else
+                                <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <strong>Belum Ada Truck</strong>
+                                </div>
+
+                                <script>
+                                    $(".alert").alert();
+                                </script>
+                            @endif
+
+                            <form action="{{url('rs/change-truck')}}" method="post">
+                                @csrf
+                                <div class="form-group">
+                                    <input hidden name="id" value="{{$data->id}}">
+                                    <label for="">Pindah Tugaskan Ke : (Pilih Truck Baru)</label>
+                                    <select class="form-control form-select" required name="truck_id">
+                                        <option value="">Pilih Truck</option>
+                                        @forelse($trucks as $item)
+                                            <option value="{{$item->id}}"> {{$item->name}}  {{$item->nopol}}</option>
+                                        @empty
+
+                                        @endforelse
+                                    </select>
+                                    <button
+                                        id="btn-save-change-staff"
+                                        type="submit"
+                                        class="btn btn-outline-primary mt-4">Simpan Perubahan
+                                    </button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -339,6 +390,25 @@
                 </form>
 
 
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="">Riwayat Proses Transaksi</h3>
+            </div>
+
+            <div class="card-body">
+                <h5>Status Saat Ini : {{$data->status_desc}}</h5>
+
+                @forelse($history_data as $item)
+                    <div class="alert alert-light-success color-success"><i class="bi bi-check-circle"></i>
+                        {!! $item->desc !!}
+                    </div>
+                @empty
+
+
+                @endforelse
             </div>
         </div>
     </section>

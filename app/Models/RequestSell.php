@@ -10,8 +10,8 @@ class RequestSell extends Model
     use HasFactory;
 
     protected $appends = [
-        'photo_path','photo_list',
-        'driver_name', 'status_desc','staff_name','user_name','user_photo'];
+        'photo_path', 'photo_list',
+        'driver_name', 'status_desc', 'staff_name', 'user_name', 'user_photo', 'truck'];
 
     function getPhotoPathAttribute()
     {
@@ -20,7 +20,7 @@ class RequestSell extends Model
 
     function getPhotoListAttribute()
     {
-        return MappingRSPhoto::where('request_sell_id','=',$this->id)->get();
+        return MappingRSPhoto::where('request_sell_id', '=', $this->id)->get();
     }
 
     function getDriverNameAttribute()
@@ -29,6 +29,11 @@ class RequestSell extends Model
         if ($user != null)
             return $user->name;
         else return "";
+    }
+
+    function getTruckAttribute()
+    {
+        return Truck::find($this->truck_id);
     }
 
     function getUserNameAttribute()

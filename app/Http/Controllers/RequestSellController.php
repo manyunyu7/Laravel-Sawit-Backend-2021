@@ -7,6 +7,8 @@ use App\Models\MappingRequestSellPhoto;
 use App\Models\News;
 use App\Models\Price;
 use App\Models\RequestSell;
+use App\Models\RSHistory;
+use App\Models\Truck;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,14 +39,15 @@ class RequestSellController extends Controller
         $user_data = User::findOrFail($data->user_id);
         $driver_data = User::find($data->driver_id);
         $staff_data = User::find($data->staff_id);
+        $history_data = RSHistory::where('id_rs','=',$id)->orderBy('id','desc')->get();
+        $trucks = Truck::all();
 
         $staffs = User::where('role', '=', 2)->get();
 
         $price = DB::table('price')->latest('created_at')->first();
 
-        $retVal = compact('data', 'user_data',
-            'staff_data', 'driver_data', 'price', 'staffs');
-//        return $retVal;
+        $retVal = compact('data', 'user_data','trucks',
+            'staff_data', 'driver_data', 'price', 'staffs','history_data');
         return view('requestsell.edit')->with($retVal);
     }
 
@@ -59,6 +62,7 @@ class RequestSellController extends Controller
         $data->driver_id = $request->staff_id;
 
         if ($data->save()) {
+            $this->insertHistory($data, "Pengemudi Truck Untuk Transaksi Ini Telah Dialihkan ke <strong>$data->driver_name</strong>");
             return back()->with(["success" => "Berhasil Mengganti Staff"]);
         } else {
             return back()->with(["error" => "Gagal Mengganti Staff"]);
@@ -70,6 +74,7 @@ class RequestSellController extends Controller
         $data = RequestSell::findOrFail($request->id);
         $data->status = $request->status;
         if ($data->save()) {
+            $this->insertHistory($data, "Status Pesanan Anda Telah Berubah Menjadi <strong>$data->status_desc</strong>");
             return back()->with(["success" => "Berhasil Mengganti Status"]);
         } else {
             return back()->with(["error" => "Gagal Mengganti Status"]);
@@ -86,9 +91,27 @@ class RequestSellController extends Controller
         $data->staff_id = $request->staff_id;
 
         if ($data->save()) {
+            $this->insertHistory($data, "Staff Penjemput Untuk Transaksi Ini Telah Dialihkan ke <strong>$data->staff_name</strong>");
             return back()->with(["success" => "Berhasil Mengganti Staff"]);
         } else {
             return back()->with(["error" => "Gagal Mengganti Staff"]);
+        }
+    }
+
+    public function changeTruck(Request $request)
+    {
+        $data = RequestSell::findOrFail($request->id);
+        $truck_data = Truck::find($request->truck_id);
+        if ($truck_data == null) {
+            return back()->with(["error" => "Truck Tidak Ditemukan"]);
+        }
+        $data->truck_id = $request->truck_id;
+        if ($data->save()) {
+            $this->insertHistory($data, "Truck Untuk Menjemput Transaksi Ini Telah Diperbarui menjadi
+            <strong>$truck_data->name dengan nopol $truck_data->nopol</strong>");
+            return back()->with(["success" => "Berhasil Mengganti Truck"]);
+        } else {
+            return back()->with(["error" => "Gagal Mengganti Truck"]);
         }
     }
 
@@ -250,5 +273,22 @@ class RequestSellController extends Controller
 
         return $datas;
     }
+
+    public function insertHistory(RequestSell $requestSell, $desc)
+    {
+        $history = new \App\Models\RSHistory();
+        $history->id_rs = $requestSell->id;
+        $history->id_staff = $requestSell->staff_id;
+        $history->id_driver = $requestSell->driver_id;
+        $history->id_truck = $requestSell->truck_id;
+        $history->desc = $desc;
+        $history->status = $requestSell->status;
+
+        if ($history->save())
+            echo "berhasil save status";
+        else
+            echo "history save failed";
+    }
+
 
 }

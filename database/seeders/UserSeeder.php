@@ -25,5 +25,34 @@ class UserSeeder extends Seeder
             'updated_at' => Carbon::now()->timezone('Asia/Bangkok')->format('Y-m-d H:i:s')
         ]);
 
+        DB::table('users')->insert([
+            'name' => 'Lukman Lukito',
+            'role' => '2', //1 : admin , 2: staff , 3: user
+            'contact' => '082113530900',
+            'email' => 'lukman_lukito@gmail.com',
+            'password' => bcrypt('password'),
+            'created_at' => Carbon::now()->timezone('Asia/Bangkok')->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->timezone('Asia/Bangkok')->format('Y-m-d H:i:s')
+        ]);
+        DB::table('users')->insert([
+            'name' => 'Agus Supriadi',
+            'role' => '2', //1 : admin , 2: staff , 3: user
+            'contact' => '082113530901',
+            'email' => 'agus_supriadi@gmail.com',
+            'password' => bcrypt('password'),
+            'created_at' => Carbon::now()->timezone('Asia/Bangkok')->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->timezone('Asia/Bangkok')->format('Y-m-d H:i:s')
+        ]);
+
+        DB::table('users')->insert([
+            'name' => 'Ahmad Syakir',
+            'role' => '2', //1 : admin , 2: staff , 3: user
+            'contact' => '082113530902',
+            'email' => 'syakir@gmail.com',
+            'password' => bcrypt('password'),
+            'created_at' => Carbon::now()->timezone('Asia/Bangkok')->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->timezone('Asia/Bangkok')->format('Y-m-d H:i:s')
+        ]);
+
     }
 }

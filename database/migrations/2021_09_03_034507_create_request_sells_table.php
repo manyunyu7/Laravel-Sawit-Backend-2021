@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\RequestSell;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ class CreateRequestSellsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('driver_id')->nullable();
             $table->unsignedBigInteger('staff_id')->nullable();
+            $table->unsignedBigInteger('truck_id')->nullable();
             $table->string('est_weight');
             $table->string('est_margin');
             $table->string('est_price');
@@ -44,6 +46,10 @@ class CreateRequestSellsTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
+            $table->foreign('truck_id')
+                ->references('id')
+                ->on('trucks')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -57,4 +63,6 @@ class CreateRequestSellsTable extends Migration
     {
         Schema::dropIfExists('request_sells');
     }
+
+
 }
