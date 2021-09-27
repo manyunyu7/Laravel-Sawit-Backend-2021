@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::prefix('request-sell')->group(function () {
         Route::post('/store', 'RequestSellController@store');
+        Route::get('/{id}/detail', 'RequestSellController@viewDetail');
     });
 
 

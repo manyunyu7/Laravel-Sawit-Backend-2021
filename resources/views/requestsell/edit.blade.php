@@ -76,8 +76,8 @@
                     <div class="card-body px-3 py-4-5">
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="stats-icon blue">
-                                    <i class="iconly-boldProfile"></i>
+                                <div class="stats-icon purple">
+                                    <i class="iconly-boldShow"></i>
                                 </div>
                             </div>
                             <div class="col-md-8">
@@ -118,7 +118,7 @@
                             </div>
                             <div class="col-md-8">
                                 <h6 class="text-muted font-semibold">Harga Jual Saat Ini<br></h6>
-                                <h6 class="font-extrabold mb-0">{{$price->price}} % </h6>
+                                <h6 class="font-extrabold mb-0">{{$price->price}}</h6>
                             </div>
                         </div>
                     </div>
@@ -286,7 +286,8 @@
                     <div class="tab-pane fade" id="truck" role="tabpanel" aria-labelledby="truck-tab">
                         <div class="border p-3">
                             @if($data->truck!=null)
-                                    <img height="300px" style="border-radius: 20px" src="{{$data->truck->photo}}" alt="" srcset="">
+                                <img height="300px" style="border-radius: 20px" src="{{$data->truck->photo}}" alt=""
+                                     srcset="">
                                 <ul>
                                     <li class="mt-3">Nama : {{$data->truck->name}}</li>
                                     <li>Nopol : {{$data->truck->nopol}}</li>
@@ -332,6 +333,7 @@
                 </div>
             </div>
         </div>
+
 
         <div class="card">
             <div class="card-header">
@@ -389,6 +391,104 @@
 
                 </form>
 
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="">Update Data</h3>
+            </div>
+
+            <div class="card-body">
+                <form action="{{ url('rs/change-major') }}" method="post">
+                    <input type="hidden" name="id" value="{{$data->id}}">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul>
+                                <li>Status Saat Ini : <strong>{{$data->status_desc}}</strong></li>
+                                <li>Driver Saat ini :</li>
+                                <li>Staff Saat Ini :</li>
+                                <li>Kendaraan Saat Ini :</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="basicInput">Driver Saat Ini
+                                    : {{$data->driver_name ?: "Belum Ada Driver"}}</label>
+                                <select class="form-control form-select" name="driver_id" id="">
+                                    <option value="">Pilih Driver Baru</option>
+                                    @forelse($staffs as $item)
+                                        <option value="{{$item->id}}" {{ ($item->id) == ($data->driver_id) ? 'selected' : '' }}>
+                                            {{$item->name}}
+                                        </option>
+                                    @empty
+
+                                    @endforelse
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="basicInput">{{$data->staff_name ?: "Belum Ada Staff"}}</label>
+                                <select class="form-control form-select" name="staff_id" id="">
+                                    <option value="">Pilih Driver Baru</option>
+                                    @forelse($staffs as $item)
+                                        <option value="{{$item->id}}" {{ ($item->id) == ($data->staff_id) ? 'selected' : '' }}>
+                                            {{$item->name}}
+                                        </option>
+                                    @empty
+
+                                    @endforelse
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label for="basicInput">{{$data->truck_name ?: "Belum Ada Truck"}}</label>
+                                <select class="form-control form-select" name="truck_id" id="">
+                                    <option value="">Pilih Truck Baru</option>
+                                    @forelse($trucks as $item)
+                                        <option value="{{$item->id}}" {{ ($item->id) == ($data->truck_id) ? 'selected' : '' }}>
+                                            {{$item->name}}
+                                        </option>
+                                    @empty
+
+                                    @endforelse
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">Ubah Status</label>
+                                <select class="form-control form-select" name="status" id="">
+                                    <option value="">Pilih Status Baru</option>
+                                    <option value="3" {{ ($data->status) == 3 ? 'selected' : '' }}>
+                                        Menunggu Diproses
+                                    </option>
+                                    <option value="2" {{ ($data->status) == 2 ? 'selected' : '' }}>
+                                        Diproses
+                                    </option>
+                                    <option value="4" {{ ($data->status) == 4 ? 'selected' : '' }}>
+                                        Dalam Penjemputan
+                                    </option>
+                                    <option value="1" {{ ($data->status) == 1 ? 'selected' : '' }}>
+                                        Sukses
+                                    </option>
+                                    <option value="1" {{ ($data->status) == 1 ? 'selected' : '' }}>
+                                        Dibatalkan
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        </div>
+                    </div>
+
+                </form>
 
             </div>
         </div>

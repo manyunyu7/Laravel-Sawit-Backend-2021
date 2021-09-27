@@ -39,15 +39,19 @@ class RequestSellController extends Controller
         $user_data = User::findOrFail($data->user_id);
         $driver_data = User::find($data->driver_id);
         $staff_data = User::find($data->staff_id);
-        $history_data = RSHistory::where('id_rs','=',$id)->orderBy('id','desc')->get();
+        $history_data = RSHistory::where('id_rs', '=', $id)->orderBy('id', 'desc')->get();
+        $truck_data = Truck::find($data->truck_id);
         $trucks = Truck::all();
 
         $staffs = User::where('role', '=', 2)->get();
 
         $price = DB::table('price')->latest('created_at')->first();
 
-        $retVal = compact('data', 'user_data','trucks',
-            'staff_data', 'driver_data', 'price', 'staffs','history_data');
+        $retVal = compact('data', 'user_data', 'trucks',
+            'staff_data', 'driver_data', 'truck_data', 'price', 'staffs', 'history_data');
+        if (RazkyFeb::isAPI())
+            return $retVal;
+
         return view('requestsell.edit')->with($retVal);
     }
 
@@ -75,6 +79,31 @@ class RequestSellController extends Controller
         $data->status = $request->status;
         if ($data->save()) {
             $this->insertHistory($data, "Status Pesanan Anda Telah Berubah Menjadi <strong>$data->status_desc</strong>");
+            return back()->with(["success" => "Berhasil Mengganti Status"]);
+        } else {
+            return back()->with(["error" => "Gagal Mengganti Status"]);
+        }
+    }
+
+    public function changeMajor(Request $request)
+    {
+        $data = RequestSell::findOrFail($request->id);
+        $staff_data = User::find($request->staff_id);
+        $driver_data = User::find($request->driver_id);
+        $truck_data = Truck::find($request->truck_id);
+
+        $data->staff_id = $request->staff_id;
+        $data->driver_id = $request->driver_id;
+        $data->status = $request->status;
+        $data->truck_id = $request->truck_id;
+
+        if ($data->save()) {
+            $this->insertHistory(
+                $data,
+                "Status Pesanan Anda Telah Berubah Menjadi <strong>$data->status_desc</strong>," .
+                "dijemput oleh Staff <strong>$staff_data->name ($staff_data->email)</strong> dan" .
+                " <strong>$driver_data->name ($driver_data->email) </strong>" .
+                " dengan truck <strong>$truck_data->name ($truck_data->nopol)</strong>");
             return back()->with(["success" => "Berhasil Mengganti Status"]);
         } else {
             return back()->with(["error" => "Gagal Mengganti Status"]);
@@ -138,13 +167,6 @@ class RequestSellController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $latestPriceObject = Price::latest()->first();
-        $latestPrice = 0;
-        $latestMargin = 0;
-
-        if ($latestPriceObject != null) {
-            $latestPrice = $latestPriceObject->price;
-            $latestMargin = $latestPriceObject->margin;
-        }
 
         $image = $request->file('upload_file');
 
@@ -160,19 +182,17 @@ class RequestSellController extends Controller
 
 
         $data = new RequestSell();
-
         $data->user_id = Auth::id();
         $data->driver_id = null;
         $data->staff_id = null;
         $data->est_weight = $request->est_weight;
-        $data->est_price = $latestPrice;
-        $data->est_margin = $latestMargin;
+        $data->est_margin = strval($latestPriceObject->margin);
+        $data->est_price =  strval($latestPriceObject->price);
         $data->address = $request->address;
         $data->lat = $request->lat;
         $data->long = $request->long;
         $data->contact = $request->contact;
         $data->status = $request->status;
-
 
         if ($data->save()) {
 
@@ -181,6 +201,7 @@ class RequestSellController extends Controller
 
                 //Save Image into MappingRequestSellPhoto;
                 $mapping = new MappingRequestSellPhoto();
+                $mapping->request_sell_id = $data->id;
                 $mapping->request_sell_id = $data->id;
                 $mapping->path = $itemPhoto;
                 $mapping->save();

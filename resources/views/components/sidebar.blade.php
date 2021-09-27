@@ -137,7 +137,7 @@
                 <li class="sidebar-item  has-sub  {{ (Request::is('menu/*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>
-                        <span>Coffe Menu</span>
+                        <span>Produk Olahan</span>
                     </a>
                     <ul class="submenu  {{ (Request::is('menu/*')) ? 'active' : ''}} ">
                         <li class="submenu-item   {{ (Request::is('menu/create')) ? 'active' : ''}}">
