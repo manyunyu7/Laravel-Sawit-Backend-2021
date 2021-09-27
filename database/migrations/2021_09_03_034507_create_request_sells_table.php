@@ -20,9 +20,9 @@ class CreateRequestSellsTable extends Migration
             $table->unsignedBigInteger('driver_id')->nullable();
             $table->unsignedBigInteger('staff_id')->nullable();
             $table->unsignedBigInteger('truck_id')->nullable();
-            $table->string('est_weight');
-            $table->string('est_margin');
-            $table->string('est_price');
+            $table->string('est_weight')->nullable();
+            $table->string('est_margin')->nullable();
+            $table->string('est_price')->nullable();
             $table->string('address')->nullable();
             $table->string('lat')->nullable();
             $table->string('long')->nullable();
