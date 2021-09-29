@@ -19,8 +19,6 @@ class RequestSellController extends Controller
 
     /**
      * Show the form for managing existing resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function viewManage()
     {
@@ -31,7 +29,6 @@ class RequestSellController extends Controller
     /**
      * Show the edit form for editing armada
      *
-     * @return \Illuminate\Http\Response
      */
     public function viewDetail($id)
     {
@@ -66,7 +63,20 @@ class RequestSellController extends Controller
         $data->driver_id = $request->staff_id;
 
         if ($data->save()) {
-            $this->insertHistory($data, "Pengemudi Truck Untuk Transaksi Ini Telah Dialihkan ke <strong>$data->driver_name</strong>");
+
+            $notifTitle = "Transaksi $data->rs_code";
+            $notifMessage = "Status Transaksi $data->rs_code telah $data->status_desc";
+            $historyMessage = "Pengemudi Truck Untuk Transaksi Ini Telah Dialihkan ke <strong>$data->driver_name</strong>";
+            $this->insertHistory($data, $historyMessage);
+
+            RazkyFeb::insertNotification(
+                $data->user_id,
+                $notifTitle,
+                $notifMessage,
+                $historyMessage,
+                2
+            );
+
             return back()->with(["success" => "Berhasil Mengganti Staff"]);
         } else {
             return back()->with(["error" => "Gagal Mengganti Staff"]);
@@ -78,7 +88,19 @@ class RequestSellController extends Controller
         $data = RequestSell::findOrFail($request->id);
         $data->status = $request->status;
         if ($data->save()) {
-            $this->insertHistory($data, "Status Pesanan Anda Telah Berubah Menjadi <strong>$data->status_desc</strong>");
+            $notifTitle = "Transaksi $data->rs_code";
+            $notifMessage = "Status Transaksi $data->rs_code telah $data->status_desc";
+            $historyMessage = "Status Pesanan Anda Telah Berubah Menjadi <strong>$data->status_desc</strong>";
+            $this->insertHistory($data, $historyMessage);
+
+            RazkyFeb::insertNotification(
+                $data->user_id,
+                $notifTitle,
+                $notifMessage,
+                $historyMessage,
+                2
+            );
+
             return back()->with(["success" => "Berhasil Mengganti Status"]);
         } else {
             return back()->with(["error" => "Gagal Mengganti Status"]);
@@ -98,12 +120,28 @@ class RequestSellController extends Controller
         $data->truck_id = $request->truck_id;
 
         if ($data->save()) {
-            $this->insertHistory(
-                $data,
+
+            $notifTitle = "Transaksi " . $data->rs_code;
+            $historyMessage =
                 "Status Pesanan Anda Telah Berubah Menjadi <strong>$data->status_desc</strong>," .
                 "dijemput oleh Staff <strong>$staff_data->name ($staff_data->email)</strong> dan" .
                 " <strong>$driver_data->name ($driver_data->email) </strong>" .
-                " dengan truck <strong>$truck_data->name ($truck_data->nopol)</strong>");
+                " dengan truck <strong>$truck_data->name ($truck_data->nopol)</strong>";
+
+            $this->insertHistory(
+                $data,
+                $historyMessage
+            );
+
+            $notifMessage = "Proses Transaksi $data->rs_code Telah Diupdate";
+            RazkyFeb::insertNotification(
+                $data->user_id,
+                $notifTitle,
+                $notifMessage,
+                $historyMessage,
+                2
+            );
+
             return back()->with(["success" => "Berhasil Mengganti Status"]);
         } else {
             return back()->with(["error" => "Gagal Mengganti Status"]);
@@ -120,7 +158,19 @@ class RequestSellController extends Controller
         $data->staff_id = $request->staff_id;
 
         if ($data->save()) {
-            $this->insertHistory($data, "Staff Penjemput Untuk Transaksi Ini Telah Dialihkan ke <strong>$data->staff_name</strong>");
+
+            $notifTitle = "Transaksi " . $data->rs_code;
+            $notifMessage = "Proses Transaksi $data->rs_code Telah Diupdate";
+            $historyMessage = "Staff Penjemput Untuk Transaksi Ini Telah Dialihkan ke <strong>$data->staff_name</strong>";
+            $this->insertHistory($data, $historyMessage);
+
+            RazkyFeb::insertNotification(
+                $data->user_id,
+                $notifTitle,
+                $notifMessage,
+                $historyMessage,
+                2
+            );
             return back()->with(["success" => "Berhasil Mengganti Staff"]);
         } else {
             return back()->with(["error" => "Gagal Mengganti Staff"]);
@@ -136,8 +186,24 @@ class RequestSellController extends Controller
         }
         $data->truck_id = $request->truck_id;
         if ($data->save()) {
-            $this->insertHistory($data, "Truck Untuk Menjemput Transaksi Ini Telah Diperbarui menjadi
-            <strong>$truck_data->name dengan nopol $truck_data->nopol</strong>");
+
+            $notifTitle = "Transaksi " . $data->rs_code;
+            $notifMessage = "Proses Transaksi $data->rs_code Telah Diupdate";
+            $historyMessage =
+                "Truck Untuk Menjemput Transaksi Ini Telah Diperbarui menjadi
+            <strong>$truck_data->name dengan nopol $truck_data->nopol</strong>";
+
+            $this->insertHistory($data, $historyMessage);
+
+            RazkyFeb::insertNotification(
+                $data->user_id,
+                $notifTitle,
+                $notifMessage,
+                $historyMessage,
+                2
+            );
+
+
             return back()->with(["success" => "Berhasil Mengganti Truck"]);
         } else {
             return back()->with(["error" => "Gagal Mengganti Truck"]);
@@ -187,7 +253,7 @@ class RequestSellController extends Controller
         $data->staff_id = null;
         $data->est_weight = $request->est_weight;
         $data->est_margin = strval($latestPriceObject->margin);
-        $data->est_price =  strval($latestPriceObject->price);
+        $data->est_price = strval($latestPriceObject->price);
         $data->address = $request->address;
         $data->lat = $request->lat;
         $data->long = $request->long;
@@ -304,11 +370,7 @@ class RequestSellController extends Controller
         $history->id_truck = $requestSell->truck_id;
         $history->desc = $desc;
         $history->status = $requestSell->status;
-
-        if ($history->save())
-            echo "berhasil save status";
-        else
-            echo "history save failed";
+        $history->save();
     }
 
 
