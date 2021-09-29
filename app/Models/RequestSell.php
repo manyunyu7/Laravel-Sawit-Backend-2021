@@ -12,6 +12,7 @@ class RequestSell extends Model
 
 
     protected $appends = [
+        'rs_code',
         'photo_path', 'photo_list', 'truck_name', 'result_est_price_now','result_est_price_old','margin_in_percentage',
         'driver_name', 'status_desc', 'staff_name', 'user_name', 'user_photo', 'truck',
         'created_at_idn','updated_at_idn','final_price','final_weight'
@@ -20,6 +21,13 @@ class RequestSell extends Model
     public function getCreatedAtIdnAttribute()
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('Y-m-d H:i:s');
+    }
+
+    public function getRsCodeAttribute()
+    {
+        $date = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('YmdHis');
+        $code  = "#SAWIT-".$date."-".$this->id;
+        return $code;
     }
 
     public function getUpdatedAtIdnAttribute()
@@ -68,7 +76,7 @@ class RequestSell extends Model
         $user = User::find($this->driver_id);
         if ($user != null)
             return $user->name;
-        else return "";
+        else return "Belum Ada Driver";
     }
 
     function getTruckNameAttribute()
