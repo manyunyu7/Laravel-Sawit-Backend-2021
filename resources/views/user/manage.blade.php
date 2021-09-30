@@ -106,6 +106,7 @@
                                             <tr>
                                                 <th data-sortable="">No</th>
                                                 <th data-sortable="">Nama</th>
+                                                <th data-sortable="">Photo</th>
                                                 <th data-sortable="">Email</th>
                                                 <th data-sortable="">Kontak</th>
                                                 <th data-sortable="">Dibuat</th>
@@ -118,6 +119,11 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $user->name }}</td>
+                                                    <td>
+                                                        <div class="avatar avatar-lg">
+                                                            <img src="{{asset($user->photo)}}">
+                                                        </div>
+                                                    </td>
                                                     <td>{{ $user->email }}</td>
                                                     <td>{{ $user->contact }}</td>
                                                     <td>{{ $user->created_at }}</td>
@@ -131,7 +137,7 @@
                                                             <button id="{{ $user->id }}"  type="button"
                                                           class="btn btn-primary">Edit User</button>
                                                         </a>
-                                                      
+
                                                     </td>
                                                 </tr>
                                             @empty
@@ -164,7 +170,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Data Karyawan terkait akan dihapus. 
+                    Data Karyawan terkait akan dihapus.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary hide-modal" data-dismiss="modal">
@@ -178,7 +184,7 @@
                             <span class=" d-sm-block">Hapus Karyawan</span>
                         </button>
                     </a>
-                
+
                 </div>
             </div>
         </div>
@@ -204,7 +210,7 @@
     <script>
         $('body').on("click", ".btn-delete", function() {
             var id = $(this).attr("id")
-            $(".btn-destroy").attr("href", window.location.origin + "/karyawan/" + id + "/delete")
+            $(".btn-destroy").attr("href", window.location.origin + "/user/" + id + "/delete")
             $("#destroy-modal").modal("show")
         });
     </script>

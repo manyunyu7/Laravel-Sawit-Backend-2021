@@ -15,18 +15,18 @@ class StaffController extends Controller
     public function viewAdminManage()
     {
         $users = User::all();
-        return view('karyawan.manage')->with(compact('users'));
+        return view('user.manage')->with(compact('users'));
     }
 
     public function viewAdminEdit($id)
     {
         $users = User::where('id', '=', $id)->first();
-        return view('karyawan.edit')->with(compact('users'));
+        return view('user.edit')->with(compact('users'));
     }
 
     public function viewAdminCreate()
     {
-        return view('karyawan.create');
+        return view('user.create');
     }
 
 
