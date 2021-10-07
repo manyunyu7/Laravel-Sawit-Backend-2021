@@ -3,7 +3,8 @@
 /public/storage
 /public/web_files/request_sell/*
 /public/web_files/news/*
-/public/web_files/
+/public/web_files/truck/*
+/public/web_files/user_profile/*
 /storage/*.key
 /vendor
 .env

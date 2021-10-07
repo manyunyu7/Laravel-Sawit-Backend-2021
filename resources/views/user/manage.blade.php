@@ -105,6 +105,7 @@
                                         <thead>
                                             <tr>
                                                 <th data-sortable="">No</th>
+                                                <th data-sortable="">Role</th>
                                                 <th data-sortable="">Nama</th>
                                                 <th data-sortable="">Photo</th>
                                                 <th data-sortable="">Email</th>
@@ -119,6 +120,7 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $user->name }}</td>
+                                                    <td>{{ $user->role_desc }}</td>
                                                     <td>
                                                         <div class="avatar avatar-lg">
                                                             <img src="{{asset($user->photo)}}">

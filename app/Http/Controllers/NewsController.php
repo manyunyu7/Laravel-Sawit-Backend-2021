@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\RazkyFeb;
-use App\Models\Material;
 use App\Models\News;
-use App\Models\Truck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

@@ -46,17 +46,24 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::get('/{id}/detail', 'RequestSellController@viewDetail');
     });
 
+    Route::prefix('news')->group(function () {
+        Route::get('/get', 'NewsController@get');
+    });
+
+    Route::prefix('mnotification')->group(function () {
+        Route::get('get', 'MNotificationController@getByUser');
+        Route::get('user/{id}', 'MNotificationController@getByUser');
+    });
+
+    Route::prefix('price')->group(function () {
+        Route::get('/', 'PriceController@getAll');
+    });
+
 
     Route::post('save-user', 'UserController@saveUser');
     Route::put('edit-user', 'UserController@editUser');
 });
-Route::prefix('price')->group(function () {
-    Route::get('/', 'PriceController@getAll');
-});
 
-Route::prefix('news')->group(function () {
-    Route::get('/get', 'NewsController@get');
-});
 
 Route::prefix('user')->group(function () {
     Route::get('{id}/request-sell', 'RequestSellController@getByUser');
@@ -66,8 +73,5 @@ Route::prefix('staff')->group(function () {
     Route::get('{id}/request-sell', 'RequestSellController@getByUser');
 });
 
-Route::prefix('mnotification')->group(function () {
-    Route::get('get', 'MNotificationController@getByUser');
-    Route::get('user/{id}', 'MNotificationController@getByUser');
-});
+
 

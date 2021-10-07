@@ -33,10 +33,25 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
-    protected $appends = ['photo_path'];
+    protected $appends = ['photo_path','role_desc'];
 
     function getPhotoPathAttribute(){
         return asset($this->photo);
+    }
+
+    function getRoleDescAttribute(){
+        $retVal = "";
+        switch ($this->role){
+            case 3:
+                return "User";
+                break;
+            case 2 :
+                return "Staff";
+                break;
+            case 1 :
+                return "Admin";
+                break;
+        }
     }
 
 
@@ -65,5 +80,5 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTCustomClaims() {
         return [];
-    }    
+    }
 }

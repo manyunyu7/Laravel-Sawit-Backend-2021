@@ -19,22 +19,6 @@ class RequestSell extends Model
         'created_at_idn', 'updated_at_idn', 'final_price', 'final_weight'
     ];
 
-//    public function getAsDriverAttribute()
-//    {
-//        if (Auth::id() == $this->driver_id)
-//            return true;
-//        else
-//            return false;
-//    }
-//
-//    public function getAsStaffAttribute()
-//    {
-//        if (Auth::id() == $this->staff_id)
-//            return true;
-//        else
-//            return false;
-//    }
-
     public function getCreatedAtIdnAttribute()
     {
         return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('Y-m-d H:i:s');
