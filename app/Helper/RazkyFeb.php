@@ -72,6 +72,10 @@ class RazkyFeb
         // }
     }
 
+    public static function logout(){
+        return response()->json(['error' => 'Unauthenticated.'], 401);
+    }
+
     public static function checkApiKey($key)
     {
         $check = DB::table('api_key')
