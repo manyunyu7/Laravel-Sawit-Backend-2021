@@ -320,7 +320,8 @@ class RequestSellController extends Controller
         $isFromUser = true;
         $user = User::find($id);
 
-        $role = $user->role;
+        if ($user != null)
+            $role = $user->role;
 
         $status = $request->status;
         $perPage = $request->per_page;
@@ -386,10 +387,10 @@ class RequestSellController extends Controller
                     // if status is not null
                     if ($user->role == 2)
                         $datas = RequestSell::
-                            where(function ($query) use ($id) {
-                                $query->where('staff_id', '=', $id)
-                                    ->orWhere('driver_id', '=', $id);
-                            })
+                        where(function ($query) use ($id) {
+                            $query->where('staff_id', '=', $id)
+                                ->orWhere('driver_id', '=', $id);
+                        })
                             ->orderBy('id', 'desc')->simplePaginate($perPage);
                     if ($user->role == 3)
                         $datas = RequestSell::where('user_id', '=', $id)

@@ -99,7 +99,7 @@ class ArmadaController extends Controller
         }else{
             if ($request->is('api/*'))
                 return RazkyFeb::responseErrorWithData(
-                    400, 3, 400,
+                    200, 3, 400,
                     "Berhasil Mengupdate Data",
                     "Success",
                     ""

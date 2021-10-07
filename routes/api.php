@@ -59,6 +59,13 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::get('/', 'PriceController@getAll');
     });
 
+    Route::prefix('rs-chat')->group(function () {
+        Route::post('/store', 'RSChatController@store');
+        Route::delete('/{id}/delete', 'RSChatController@delete');
+        Route::get('/get', 'RSChatController@getAll');
+        Route::get('topic/{id}/get', 'RSChatController@getByTopic');
+    });
+
 
     Route::post('save-user', 'UserController@saveUser');
     Route::put('edit-user', 'UserController@editUser');

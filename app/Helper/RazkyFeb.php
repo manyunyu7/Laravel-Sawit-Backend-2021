@@ -76,6 +76,10 @@ class RazkyFeb
         return response()->json(['error' => 'Unauthenticated.'], 401);
     }
 
+    public static function error($code,$message){
+        return response()->json(['message' => "$message"], $code);
+    }
+
     public static function checkApiKey($key)
     {
         $check = DB::table('api_key')
