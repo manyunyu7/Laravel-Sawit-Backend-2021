@@ -62,3 +62,12 @@ Route::prefix('user')->group(function () {
     Route::get('{id}/request-sell', 'RequestSellController@getByUser');
 });
 
+Route::prefix('staff')->group(function () {
+    Route::get('{id}/request-sell', 'RequestSellController@getByUser');
+});
+
+Route::prefix('mnotification')->group(function () {
+    Route::get('get', 'MNotificationController@getByUser');
+    Route::get('user/{id}', 'MNotificationController@getByUser');
+});
+

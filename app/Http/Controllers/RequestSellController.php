@@ -119,14 +119,20 @@ class RequestSellController extends Controller
         $data->status = $request->status;
         $data->truck_id = $request->truck_id;
 
+        $reqStaff = $request->staff_id;
+        $reqDriver = $request->driver_id;
+        $reqStatus = $request->status;
+        $reqTruck = $request->truck;
+
         if ($data->save()) {
 
             $notifTitle = "Transaksi " . $data->rs_code;
-            $historyMessage =
-                "Status Pesanan Anda Telah Berubah Menjadi <strong>$data->status_desc</strong>," .
-                "dijemput oleh Staff <strong>$staff_data->name ($staff_data->email)</strong> dan" .
-                " <strong>$driver_data->name ($driver_data->email) </strong>" .
-                " dengan truck <strong>$truck_data->name ($truck_data->nopol)</strong>";
+            $historyMessage = "Status Transaksi Anda Telah Mengalami Perubahan";
+            // $historyMessage =
+            //     "Status Pesanan Anda Telah Berubah Menjadi <strong>$data->status_desc</strong>," .
+            //     "dijemput oleh Staff <strong>$staff_data->name ($staff_data->email)</strong> dan" .
+            //     " <strong>$driver_data->name ($driver_data->email) </strong>" .
+            //     " dengan truck <strong>$truck_data->name ($truck_data->nopol)</strong>";
 
             $this->insertHistory(
                 $data,
@@ -310,50 +316,86 @@ class RequestSellController extends Controller
 
     public function getByUser($id, Request $request)
     {
+        //either staff or user;
+        $isFromUser = true;
+        $user = User::find($id);
+
+        $role = $user->role;
+
         $status = $request->status;
         $perPage = $request->per_page;
+
         if ($request->per_page == null) {
             $perPage = 10;
         }
 
-        // Check if id is all
-        if ($id == "all") {
-            // Check if status filter is not null
-            if ($status != null) {
-                $datas =
-                    RequestSell::
-                    where('status', '=', $status)
-                        ->orderBy('id', 'desc')
-                        ->simplePaginate($perPage);
-            } else {
-                //will executed if filter is null
-                $datas = RequestSell::orderBy('id', 'desc')->simplePaginate($perPage);
-            }
-        } else {
-            if ($status != null) {
-                $datas =
-                    RequestSell::
-                    where('status', '=', $status)
-                        ->where('user_id', '=', $id)
-                        ->where('status', '=', $status)
-                        ->orderBy('id', 'desc')
-                        ->simplePaginate($perPage);
-            } else {
-                $datas = RequestSell::where('user_id', '=', $id)
-                    ->orderBy('id', 'desc')->simplePaginate($perPage);
-            }
-
-        }
-
         // if request doesnt containt ?paginate=true
         // then show all data directly
-        if ($request->is_paginate == null) {
-
+        if ($request->is_paginate == null || $request->is_paginate == "false") {
             // Check if id is all
             if ($id == "all") {
                 $datas = RequestSell::orderBy('id', 'desc')->get();
             } else {
-                $datas = RequestSell::where('user_id', '=', $id)->orderBy('id', 'desc')->get();
+                if ($user->role == 2)
+                    $datas = RequestSell::
+                    where(function ($query) use ($id) {
+                        $query->where('staff_id', '=', $id)
+                            ->orWhere('driver_id', '=', $id);
+                    })
+                        ->orderBy('id', 'desc')->get();
+                else
+                    $datas = RequestSell::where('user_id', '=', $id)->orderBy('id', 'desc')->get();
+            }
+        } else {
+            // Check if id is all
+            // which mean, API will response all
+            if ($id == "all") {
+                // Check if status filter is not null
+                if ($status != null) {
+                    $datas =
+                        RequestSell::
+                        where('status', '=', $status)
+                            ->orderBy('id', 'desc')
+                            ->simplePaginate($perPage);
+                } else {
+                    //will executed if filter is null, which means, same as "all" filter
+                    $datas = RequestSell::orderBy('id', 'desc')->simplePaginate($perPage);
+                }
+            } else {
+                if ($status != null) {
+                    if ($user->role == 2)
+                        RequestSell::
+                        where('status', '=', $status)
+                            ->where(function ($query) use ($id) {
+                                $query->where('staff_id', '=', $id)
+                                    ->orWhere('driver_id', '=', $id);
+                            })
+                            ->orderBy('id', 'desc')
+                            ->simplePaginate($perPage);
+                    else
+                        $datas =
+                            RequestSell::
+                            where('status', '=', $status)
+                                ->where('user_id', '=', $id)
+                                ->where('status', '=', $status)
+                                ->orderBy('id', 'desc')
+                                ->simplePaginate($perPage);
+
+
+                } else {
+                    // if status is not null
+                    if ($user->role == 2)
+                        $datas = RequestSell::
+                            where(function ($query) use ($id) {
+                                $query->where('staff_id', '=', $id)
+                                    ->orWhere('driver_id', '=', $id);
+                            })
+                            ->orderBy('id', 'desc')->simplePaginate($perPage);
+                    if ($user->role == 3)
+                        $datas = RequestSell::where('user_id', '=', $id)
+                            ->orderBy('id', 'desc')->simplePaginate($perPage);
+                }
+
             }
 
         }

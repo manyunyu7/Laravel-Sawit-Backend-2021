@@ -34,7 +34,7 @@
             </div>
 
             <div class="card-body">
-                <form action="{{ url('news/store') }}" enctype="multipart/form-data" method="post">
+                <form action='{{ url("news/$data->id/update") }}' enctype="multipart/form-data" method="post">
                     @csrf
                     <div class="row">
                         <div class="col-12 mb-5">

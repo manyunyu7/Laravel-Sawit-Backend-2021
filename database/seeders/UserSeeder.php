@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
 
         $this->insertUser(
             'Ahmad Zaky',
-            '3',
+            '2',
             '088223738702',
             'ahmadzaky@gmail.com',
             '/razky_samples/ahmad_zaky.jpg',
@@ -72,11 +72,65 @@ class UserSeeder extends Seeder
         );
 
         $this->insertUser(
-            "Ade Londok",
-            "3",
+            "Kiko Mizuhara",
+            "2",
             '088223738703',
-            'ade_londok@gmail.com',
-            '/razky_samples/ade_londok.jpg',
+            'kiko@gmail.com',
+            '/razky_samples/kiko_mizu.jpg',
+            bcrypt('password')
+        );
+
+        $this->insertUser(
+            "Sandhika Galih",
+            "2",
+            '088223738704',
+            'sandhika@gmail.com',
+            '/razky_samples/sandhika.jpg',
+            bcrypt('password')
+        );
+
+        $this->insertUser(
+            "Eko Khannedy",
+            "2",
+            '088223738705',
+            'khannedy@gmail.com',
+            '/razky_samples/ek_khannedy.jpg',
+            bcrypt('password')
+        );
+
+        $this->insertUser(
+            "Shantika Sandyakala",
+            "2",
+            '088223738706',
+            'shantika@gmail.com',
+            '/razky_samples/santhika.jpg',
+            bcrypt('password')
+        );
+
+        $this->insertUser(
+            "Clarissa Divya",
+            "2",
+            '088223738707',
+            'clarissa@gmail.com',
+            '/razky_samples/santhika.jpg',
+            bcrypt('password')
+        );
+
+        $this->insertUser(
+            "Marta Klyrova",
+            "2",
+            '088223738708',
+            'marta@gmail.com',
+            '/razky_samples/marta_klyrova.jpg',
+            bcrypt('password')
+        );
+
+        $this->insertUser(
+            "Yua Sakura",
+            "2",
+            '088223738709',
+            'yua_sakura@gmail.com',
+            '/razky_samples/yua_sakura.jpg',
             bcrypt('password')
         );
 

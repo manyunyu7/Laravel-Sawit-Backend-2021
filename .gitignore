@@ -3,6 +3,7 @@
 /public/storage
 /public/web_files/request_sell/*
 /public/web_files/news/*
+/public/web_files/
 /storage/*.key
 /vendor
 .env

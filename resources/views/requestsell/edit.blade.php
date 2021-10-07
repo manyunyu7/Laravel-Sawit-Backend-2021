@@ -45,7 +45,7 @@
                     <div class="carousel-inner">
                         @forelse($data->photo_list as $item)
                             <div class="carousel-item @if($loop->iteration==1) active @endif">
-                                <img height="300px" src="{{$item->photo_path}}" class="d-block w-100"
+                                <img height="500px" src="{{$item->photo_path}}" class="d-block w-100"
                                      alt="..." style="  object-fit: cover;">
                                 <div class="carousel-caption d-none d-md-block">
                                     <p>Foto Penjualan Sawit</p>
@@ -188,7 +188,7 @@
                         <div class="border p-3">
                             @if($staff_data!=null)
                                 <div class="avatar avatar-xl mb-3">
-                                    <img src="{{$data->user_photo}}" alt="" srcset="">
+                                    <img src="{{$staff_data->photo_path}}" alt="" srcset="">
                                 </div>
                                 <ul>
                                     <li class="mt-3">Nama : {{$staff_data->name}}</li>
@@ -238,7 +238,7 @@
                         <div class="border p-3">
                             @if($driver_data!=null)
                                 <div class="avatar avatar-xl mb-3">
-                                    <img src="{{$driver_data->user_photo}}" alt="" srcset="">
+                                    <img src="{{$driver_data->photo_path}}" alt="" srcset="">
                                 </div>
                                 <ul>
                                     <li class="mt-3">Nama : {{$driver_data->name}}</li>
@@ -476,7 +476,7 @@
                                     <option value="1" {{ ($data->status) == 1 ? 'selected' : '' }}>
                                         Sukses
                                     </option>
-                                    <option value="1" {{ ($data->status) == 1 ? 'selected' : '' }}>
+                                    <option value="1" {{ ($data->status) == 0 ? 'selected' : '' }}>
                                         Dibatalkan
                                     </option>
                                 </select>

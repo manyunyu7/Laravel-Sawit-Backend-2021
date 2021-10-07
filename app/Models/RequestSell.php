@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class RequestSell extends Model
 {
@@ -13,10 +14,26 @@ class RequestSell extends Model
 
     protected $appends = [
         'rs_code',
-        'photo_path', 'photo_list', 'truck_name', 'result_est_price_now','result_est_price_old','margin_in_percentage',
+        'photo_path', 'photo_list', 'truck_name', 'result_est_price_now', 'result_est_price_old', 'margin_in_percentage',
         'driver_name', 'status_desc', 'staff_name', 'user_name', 'user_photo', 'truck',
-        'created_at_idn','updated_at_idn','final_price','final_weight'
-        ];
+        'created_at_idn', 'updated_at_idn', 'final_price', 'final_weight'
+    ];
+
+//    public function getAsDriverAttribute()
+//    {
+//        if (Auth::id() == $this->driver_id)
+//            return true;
+//        else
+//            return false;
+//    }
+//
+//    public function getAsStaffAttribute()
+//    {
+//        if (Auth::id() == $this->staff_id)
+//            return true;
+//        else
+//            return false;
+//    }
 
     public function getCreatedAtIdnAttribute()
     {
@@ -26,7 +43,7 @@ class RequestSell extends Model
     public function getRsCodeAttribute()
     {
         $date = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('YmdHis');
-        $code  = "#SAWIT-".$date."-".$this->id;
+        $code = "#SAWIT-" . $date . "-" . $this->id;
         return $code;
     }
 
@@ -35,15 +52,19 @@ class RequestSell extends Model
         return Carbon::createFromFormat('Y-m-d H:i:s', $this->updated_at)->format('Y-m-d H:i:s');
     }
 
-    function getMarginInPercentageAttribute(){
-        return $this->est_margin*100;
+    function getMarginInPercentageAttribute()
+    {
+        return $this->est_margin * 100;
     }
 
-    function getFinalPriceAttribute(){
-        return $this->est_margin*100;
+    function getFinalPriceAttribute()
+    {
+        return $this->est_margin * 100;
     }
-    function getFinalWeightAttribute(){
-        return $this->est_margin*100;
+
+    function getFinalWeightAttribute()
+    {
+        return $this->est_margin * 100;
     }
 
     function getResultEstPriceOldAttribute()
