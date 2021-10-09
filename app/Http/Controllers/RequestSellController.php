@@ -341,6 +341,8 @@ class RequestSellController extends Controller
             $perPage = 10;
         }
 
+        $datas = RequestSell::orderBy('id', 'desc')->get();
+
         // if request doesnt containt ?paginate=true
         // then show all data directly
         if ($request->is_paginate == null || $request->is_paginate == "false") {
