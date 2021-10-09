@@ -30,8 +30,16 @@ class RequestSellController extends Controller
      * Show the edit form for editing armada
      *
      */
-    public function viewDetail($id)
+    public function viewDetail(Request $request, $id)
     {
+        $userId = $request->user_id;
+        $mobile_user = "";
+        $mobile_user_role = "";
+        if ($userId != null){
+            $mobile_user = User::find($userId);
+            $mobile_user_role = $mobile_user->role;
+        }
+
         $data = RequestSell::findOrFail($id);
         $user_data = User::findOrFail($data->user_id);
         $driver_data = User::find($data->driver_id);
@@ -44,11 +52,14 @@ class RequestSellController extends Controller
 
         $price = DB::table('price')->latest('created_at')->first();
 
-        $retVal = compact('data', 'user_data', 'trucks',
+        $retVal = compact('data', 'user_data', 'trucks', 'mobile_user', 'mobile_user_role',
             'staff_data', 'driver_data', 'truck_data', 'price', 'staffs', 'history_data');
         if (RazkyFeb::isAPI())
             return $retVal;
 
+        if (str_contains(url()->current(), 'mobile_raz/')) {
+            return view('requestsell.mobile_edit')->with($retVal);
+        }
         return view('requestsell.edit')->with($retVal);
     }
 

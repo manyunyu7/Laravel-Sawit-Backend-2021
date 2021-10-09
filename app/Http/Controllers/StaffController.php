@@ -111,6 +111,7 @@ class StaffController extends Controller
             if (Auth::user()->role == 1) {
                 return back()->with(["success" => "Berhasil Mengupdate Data User"]);
             }
+            return back()->with(["success" => "Berhasil Mengupdate Data User"]);
         } else {
             if ($request->is('api/*'))
                 return RazkyFeb::responseErrorWithData(
@@ -125,7 +126,6 @@ class StaffController extends Controller
             return back()->with(["failed" => "Gagal Mengupdate Data User"]);
         }
     }
-
 
 
     function updateProfilePhoto(Request $request)

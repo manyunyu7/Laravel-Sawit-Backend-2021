@@ -75,21 +75,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('manage', "$cr@viewManage");
     });
 
-    Route::prefix('rs')->group(function(){
-        $cr = "RequestSellController";
-        Route::get('create', "$cr@viewCreate");
-        Route::post('store', "$cr@store");
-        Route::get('{id}/edit', "$cr@viewUpdate");
-        Route::get('{id}/detail', "$cr@viewDetail");
-        Route::post('{id}/update', "$cr@update");
-        Route::get('{id}/delete', "$cr@delete");
-        Route::post('change-driver', "$cr@changeDriver");
-        Route::post('change-staff', "$cr@changeStaff");
-        Route::post('change-status', "$cr@changeStatus");
-        Route::post('change-truck', "$cr@changeTruck");
-        Route::post('change-major', "$cr@changeMajor");
-        Route::get('manage', "$cr@viewManage");
-    });
+
 
     Route::prefix('news')->group(function(){
         $cr = "NewsController";
@@ -156,13 +142,27 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/user/{id}/edit', [App\Http\Controllers\StaffController::class, 'viewAdminEdit']);
 });
 
-
-
-
-
 Route::get('logout', function () {
     auth()->logout();
     Session()->flush();
 
     return Redirect::to('/');
 })->name('logout');
+
+Route::get('mobile_raz/request-sell/{id}/edit/', "RequestSellController@viewDetail");
+
+Route::prefix('rs')->group(function(){
+    $cr = "RequestSellController";
+    Route::get('create', "$cr@viewCreate");
+    Route::post('store', "$cr@store");
+    Route::get('{id}/edit', "$cr@viewUpdate");
+    Route::get('{id}/detail', "$cr@viewDetail");
+    Route::post('{id}/update', "$cr@update");
+    Route::get('{id}/delete', "$cr@delete");
+    Route::post('change-driver', "$cr@changeDriver");
+    Route::post('change-staff', "$cr@changeStaff");
+    Route::post('change-status', "$cr@changeStatus");
+    Route::post('change-truck', "$cr@changeTruck");
+    Route::post('change-major', "$cr@changeMajor");
+    Route::get('manage', "$cr@viewManage");
+});

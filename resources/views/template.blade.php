@@ -25,13 +25,22 @@
 
 <body>
 <div id="app">
-    @include('components.sidebar')
+
+
+    @if(strpos(Request::url(),"mobile_raz")===false)
+        @include('components.sidebar')
+    @endif
+
     <div id="main">
-        <header class="mb-3">
-            <a href="#" class="burger-btn d-block d-xl-none">
-                <i class="bi bi-justify fs-3"></i>
-            </a>
-        </header>
+
+        @if(strpos(Request::url(),"mobile_raz")===false)
+            <header class="mb-3">
+                <a href="#" class="burger-btn d-block d-xl-none">
+                    <i class="bi bi-justify fs-3"></i>
+                </a>
+            </header>
+        @endif
+
 
         <div class="page-heading">
             @yield('page-heading')

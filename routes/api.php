@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/change-password', 'StaffController@updatePassword');
     });
 
+
     Route::prefix('armada')->group(function () {
         Route::get('/get', 'ArmadaController@get');
     });
@@ -45,6 +46,8 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::post('/store', 'RequestSellController@store');
         Route::get('/{id}/detail', 'RequestSellController@viewDetail');
     });
+
+
 
     Route::prefix('news')->group(function () {
         Route::get('/get', 'NewsController@get');
@@ -79,6 +82,9 @@ Route::prefix('user')->group(function () {
 Route::prefix('staff')->group(function () {
     Route::get('{id}/request-sell', 'RequestSellController@getByUser');
 });
+
+
+
 
 
 
