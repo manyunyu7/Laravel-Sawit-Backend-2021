@@ -14,4 +14,8 @@ class News extends Model
         return asset($this->photo);
     }
 
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:00',
+    ];
+
 }

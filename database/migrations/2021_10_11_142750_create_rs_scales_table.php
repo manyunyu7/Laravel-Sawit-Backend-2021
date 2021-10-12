@@ -15,6 +15,7 @@ class CreateRsScalesTable extends Migration
     {
         Schema::create('rs_scales', function (Blueprint $table) {
             $table->id();
+            $table->double("result");
             $table->unsignedBigInteger('rs_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->foreign("created_by")->references("id")->on("users")->onDelete("cascade");

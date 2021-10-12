@@ -134,6 +134,9 @@ class RequestSell extends Model
             case "4" :
                 return "Dalam Penjemputan";
                 break;
+            case "5" :
+                return "Proses Timbang";
+                break;
             case "1" :
                 return "Sukses";
                 break;

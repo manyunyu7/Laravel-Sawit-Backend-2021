@@ -165,4 +165,10 @@ Route::prefix('rs')->group(function(){
     Route::post('change-truck', "$cr@changeTruck");
     Route::post('change-major', "$cr@changeMajor");
     Route::get('manage', "$cr@viewManage");
+
+    // for scaling
+    $cr2 = "RsScaleController";
+    Route::post('{id}/scale/store', "$cr2@store");
+    Route::get('{id}/scale/get', "$cr2@store");
+    Route::post('{id}/scale/{id_scale}/delete', "$cr2@delete");
 });

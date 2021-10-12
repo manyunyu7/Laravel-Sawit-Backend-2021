@@ -45,6 +45,14 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::prefix('request-sell')->group(function () {
         Route::post('/store', 'RequestSellController@store');
         Route::get('/{id}/detail', 'RequestSellController@viewDetail');
+
+        // for scaling
+        $cr2 = "RsScaleController";
+        Route::post('{id}/scale/store', "$cr2@store");
+        Route::get('{id}/scale/get', "$cr2@getByID");
+        Route::post('scale/{id_scale}/delete', "$cr2@destroy");
+        Route::get('scale/all', "$cr2@getAll");
+
     });
 
 

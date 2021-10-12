@@ -80,6 +80,10 @@ class RazkyFeb
         return response()->json(['message' => "$message"], $code);
     }
 
+    public static function success($code,$message){
+        return response()->json(['message' => "$message"], $code);
+    }
+
     public static function checkApiKey($key)
     {
         $check = DB::table('api_key')
