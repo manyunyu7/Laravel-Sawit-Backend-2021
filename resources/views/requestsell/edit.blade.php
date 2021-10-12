@@ -348,13 +348,16 @@
                     <input hidden name="id" value="{{$data->id}}">
                     <div class="form-group">
                         <label for="">Ubah Status</label>
-                        <select required class="form-control form-select" name="status" id="">
+                        <select required class="form-control form-select" name="status">
                             <option>Pilih Status Baru</option>
-                            <option value="3">Menunggu Diproses</option>
-                            <option value="2">Diproses</option>
-                            <option value="4">Dalam Penjemputan</option>
-                            <option value="1">Sukses</option>
-                            <option value="0">Dibatalkan</option>
+                            <option value="3" {{ ($data->status) == 3 ? 'selected' : '' }}>Menunggu Diproses</option>
+                            <option value="2" {{ ($data->status) == 2 ? 'selected' : '' }}>Diproses</option>
+                            <option value="5" {{ ($data->status) == 5 ? 'selected' : '' }}>
+                                Sedang Dilokasi / Sedang Ditimbang
+                            </option>
+                            <option value="4" {{ ($data->status) == 4 ? 'selected' : '' }}>Dalam Penjemputan</option>
+                            <option value="1" {{ ($data->status) == 1 ? 'selected' : '' }}>Sukses</option>
+                            <option value="0" {{ ($data->status) == 0 ? 'selected' : '' }}>Dibatalkan</option>
                         </select>
                     </div>
 
@@ -408,9 +411,6 @@
                         <div class="col-md-12">
                             <ul>
                                 <li>Status Saat Ini : <strong>{{$data->status_desc}}</strong></li>
-                                <li>Driver Saat ini :</li>
-                                <li>Staff Saat Ini :</li>
-                                <li>Kendaraan Saat Ini :</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
@@ -462,23 +462,16 @@
 
                             <div class="form-group">
                                 <label for="">Ubah Status</label>
-                                <select class="form-control form-select" name="status" id="">
-                                    <option value="">Pilih Status Baru</option>
-                                    <option value="3" {{ ($data->status) == 3 ? 'selected' : '' }}>
-                                        Menunggu Diproses
+                                <select required class="form-control form-select" name="status">
+                                    <option>Pilih Status Baru</option>
+                                    <option value="3" {{ ($data->status) == 3 ? 'selected' : '' }}>Menunggu Diproses</option>
+                                    <option value="2" {{ ($data->status) == 2 ? 'selected' : '' }}>Diproses</option>
+                                    <option value="5" {{ ($data->status) == 5 ? 'selected' : '' }}>
+                                        Sedang Dilokasi / Sedang Ditimbang
                                     </option>
-                                    <option value="2" {{ ($data->status) == 2 ? 'selected' : '' }}>
-                                        Diproses
-                                    </option>
-                                    <option value="4" {{ ($data->status) == 4 ? 'selected' : '' }}>
-                                        Dalam Penjemputan
-                                    </option>
-                                    <option value="1" {{ ($data->status) == 1 ? 'selected' : '' }}>
-                                        Sukses
-                                    </option>
-                                    <option value="1" {{ ($data->status) == 0 ? 'selected' : '' }}>
-                                        Dibatalkan
-                                    </option>
+                                    <option value="4" {{ ($data->status) == 4 ? 'selected' : '' }}>Dalam Penjemputan</option>
+                                    <option value="1" {{ ($data->status) == 1 ? 'selected' : '' }}>Sukses</option>
+                                    <option value="0" {{ ($data->status) == 0 ? 'selected' : '' }}>Dibatalkan</option>
                                 </select>
                             </div>
                         </div>
