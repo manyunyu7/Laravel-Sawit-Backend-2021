@@ -29,7 +29,6 @@ Route::get('/registerz','CustomAuthController@register');
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
     Route::get('/admin', [App\Http\Controllers\HomeController::class, 'admin']);
     Route::get('/staff', [App\Http\Controllers\HomeController::class, 'index']);
 
@@ -43,10 +42,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/user/{id}/delete', [App\Http\Controllers\StaffController::class, 'destroy']);
 
 
-
     Route::get('/material/create', [App\Http\Controllers\MaterialController::class, 'viewCreate']);
     Route::get('/material/{id}/delete', [App\Http\Controllers\MaterialController::class, 'destroy']);
-
     Route::post('/material/store', 'MaterialController@store');
     Route::get('/material/{id}/edit', 'MaterialController@edit');
     Route::post('/material/update', 'MaterialController@update');

@@ -153,7 +153,7 @@ class CustomAuthController extends Controller
             'message' => $message,
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 9999,
+            'expires_in' => auth('api')->factory()->getTTL() * 9999 ,
             'user' => auth()->user()
         ]);
     }

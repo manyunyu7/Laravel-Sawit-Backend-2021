@@ -21,7 +21,6 @@ class RsScaleController extends Controller
 
         if (Auth::user()->role == 3) {
             return response()->json([
-                'code' => 400,
                 'message' => "Access Restricted"
             ], 400);
         }
@@ -47,7 +46,21 @@ class RsScaleController extends Controller
 
     public function getByID(Request $request, $id)
     {
-        return RsScale::where('rs_id', '=', $id)->get();
+        $rsScaleData = RsScale::where('rs_id', '=', $id)->orderBy('id', 'DESC')->get();
+        $totalWeight = 0.0;
+        foreach ($rsScaleData as $item) {
+            $totalWeight += $item['result'];
+        }
+
+        $data = array(
+            "total_weight" => $totalWeight,
+            "data" => $rsScaleData,
+        );
+
+        return RazkyFeb::responseSuccessWithData(
+            200, 1, 1,
+            "Success", "Success", $data
+        );
     }
 
     public function getAll(Request $request)

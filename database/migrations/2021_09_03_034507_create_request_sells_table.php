@@ -29,6 +29,9 @@ class CreateRequestSellsTable extends Migration
             $table->string('contact')->nullable();
             $table->string('status')->nullable();
             $table->text('photo')->nullable();
+            $table->text('photo_sign_staff')->nullable();
+            $table->text('photo_sign_driver')->nullable();
+            $table->text('photo_sign_owner')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->foreign('user_id')
                 ->references('id')

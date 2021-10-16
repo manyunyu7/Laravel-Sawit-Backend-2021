@@ -130,6 +130,13 @@ class PriceController extends Controller
 
     public function getAll(Request $request)
     {
+//        return response()->json([
+//            'http_response' => 400,
+//            'status' => 0,
+//            'message_id' => 'Request Jual Gagal',
+//            'message' => 'Sell Request has Failed',
+//        ],401);
+
         $data = Price::all();
         $latestPriceObject = Price::latest()->first();
         $latestPrice = 0;

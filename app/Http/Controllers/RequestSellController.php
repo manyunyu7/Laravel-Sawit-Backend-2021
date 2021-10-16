@@ -8,6 +8,7 @@ use App\Models\News;
 use App\Models\Price;
 use App\Models\RequestSell;
 use App\Models\RSHistory;
+use App\Models\RsScale;
 use App\Models\Truck;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,7 +36,7 @@ class RequestSellController extends Controller
         $userId = $request->user_id;
         $mobile_user = "";
         $mobile_user_role = "";
-        if ($userId != null){
+        if ($userId != null) {
             $mobile_user = User::find($userId);
             $mobile_user_role = $mobile_user->role;
         }
@@ -47,13 +48,19 @@ class RequestSellController extends Controller
         $history_data = RSHistory::where('id_rs', '=', $id)->orderBy('id', 'desc')->get();
         $truck_data = Truck::find($data->truck_id);
         $trucks = Truck::all();
-
         $staffs = User::where('role', '=', 2)->get();
+
+        $rsScaleData = RsScale::where('rs_id', '=', $id)->orderBy('id', 'DESC')->get();
+        $total_weight = 0.0;
+        foreach ($rsScaleData as $item) {
+            $total_weight += $item['result'];
+        }
+
 
         $price = DB::table('price')->latest('created_at')->first();
 
         $retVal = compact('data', 'user_data', 'trucks', 'mobile_user', 'mobile_user_role',
-            'staff_data', 'driver_data', 'truck_data', 'price', 'staffs', 'history_data');
+            'staff_data', 'driver_data', 'truck_data', 'price', 'staffs', 'history_data', 'total_weight');
         if (RazkyFeb::isAPI())
             return $retVal;
 
@@ -61,6 +68,58 @@ class RequestSellController extends Controller
             return view('requestsell.mobile_edit')->with($retVal);
         }
         return view('requestsell.edit')->with($retVal);
+    }
+
+    public function storeSignature($id, Request $request)
+    {
+        $object = RequestSell::findOrFail($request->id);
+        $type = $request->type;
+
+        if ($type == null)
+            return RazkyFeb::error(400, "Lengkapi Type Terlebih Dahulu");
+
+
+        if ($request->hasFile('photo')) {
+
+            $file_path = public_path() . $object->photo;
+            RazkyFeb::removeFile($file_path);
+
+            $file = $request->file('photo');
+            $extension = $file->getClientOriginalExtension(); // you can also use file name
+            $fileName = $object->id . '_' . time() . '.' . $extension;
+
+            $savePath = "/web_files/request_sell/$id/signature";
+            $savePathDB = "$savePath$fileName";
+            $path = public_path() . "$savePath";
+            $upload = $file->move($path, $fileName);
+
+            // type 1 = user
+            // type 2 = driver
+            // type 3 = staff
+
+            if ($type == "1") {
+                $object->photo_sign_owner = $savePathDB;
+            }
+            if ($type == "2") {
+                $object->photo_sign_driver = $savePathDB;
+            }
+            if ($type == "3") {
+                $object->photo_sign_staff = $savePathDB;
+            }
+
+            if ($object->save()) {
+                if (str_contains(url()->current(), 'api/'))
+                    return RazkyFeb::success(200, "Berhasil Menyimpan Tanda Tangan");
+
+                return back()->with(["success" => "Gagal Mengganti Tanda Tangan"]);
+            } else {
+                return RazkyFeb::error(400, "Gagal Menyimpan Tanda Tangan");
+            }
+
+        } else {
+            return RazkyFeb::error(400, "Lengkapi Foto Terlebih Dahulu");
+        }
+
     }
 
 
@@ -112,13 +171,35 @@ class RequestSellController extends Controller
                 2
             );
 
+            if (str_contains(url()->current(), 'api/'))
+                return RazkyFeb::responseSuccessWithData(
+                    200,
+                    1,
+                    1,
+                    "Berhasil Mengganti Status",
+                    "Change Status Success",
+                    ""
+                );
+
             return back()->with(["success" => "Berhasil Mengganti Status"]);
+
         } else {
+            if (str_contains(url()->current(), 'api/'))
+                return RazkyFeb::responseErrorWithData(
+                    400,
+                    0,
+                    0,
+                    "Gagal Mengganti Status",
+                    "Change Status Error",
+                    ""
+                );
+
             return back()->with(["error" => "Gagal Mengganti Status"]);
         }
     }
 
-    public function changeMajor(Request $request)
+    public
+    function changeMajor(Request $request)
     {
         $data = RequestSell::findOrFail($request->id);
         $staff_data = User::find($request->staff_id);
@@ -165,7 +246,8 @@ class RequestSellController extends Controller
         }
     }
 
-    public function changeStaff(Request $request)
+    public
+    function changeStaff(Request $request)
     {
         $data = RequestSell::findOrFail($request->id);
         $staff_data = User::find($request->staff_id);
@@ -194,7 +276,8 @@ class RequestSellController extends Controller
         }
     }
 
-    public function changeTruck(Request $request)
+    public
+    function changeTruck(Request $request)
     {
         $data = RequestSell::findOrFail($request->id);
         $truck_data = Truck::find($request->truck_id);
@@ -231,7 +314,8 @@ class RequestSellController extends Controller
      * store the request sell
      *
      */
-    public function store(Request $request)
+    public
+    function store(Request $request)
     {
         $rules = [
             'long' => 'required',
@@ -318,14 +402,15 @@ class RequestSellController extends Controller
                     'status' => 0,
                     'message_id' => 'Request Jual Gagal',
                     'message' => 'Sell Request has Failed',
-                ]);
+                ], 400);
             } else {
                 return redirect("$request->redirectTo")->with(['error' => "Request Jual Berhasil"]);
             }
         }
     }
 
-    public function getByUser($id, Request $request)
+    public
+    function getByUser($id, Request $request)
     {
         //either staff or user;
         $isFromUser = true;
@@ -415,7 +500,8 @@ class RequestSellController extends Controller
         return $datas;
     }
 
-    public function insertHistory(RequestSell $requestSell, $desc)
+    public
+    function insertHistory(RequestSell $requestSell, $desc)
     {
         $history = new \App\Models\RSHistory();
         $history->id_rs = $requestSell->id;

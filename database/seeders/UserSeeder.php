@@ -134,6 +134,15 @@ class UserSeeder extends Seeder
             bcrypt('password')
         );
 
+        $this->insertUser(
+            "Manyunyu",
+            "3",
+            '088223738709',
+            'manyunyu@gmail.com',
+            '/razky_samples/manyunyu.jpg',
+            bcrypt('password')
+        );
+
     }
 
     function insertUser(

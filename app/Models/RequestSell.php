@@ -11,13 +11,67 @@ class RequestSell extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'created_at' => 'date:Y-m-d h:i:s',
+    ];
 
     protected $appends = [
         'rs_code',
-        'photo_path', 'photo_list', 'truck_name', 'result_est_price_now', 'result_est_price_old', 'margin_in_percentage',
-        'driver_name', 'status_desc', 'staff_name', 'user_name', 'user_photo', 'truck',
-        'created_at_idn', 'updated_at_idn', 'final_price', 'final_weight'
+        'total_weight',
+        'real_calculation_price',
+        'photo_path',
+        'photo_list',
+        'truck_name',
+        'result_est_price_now',
+        'result_est_price_old',
+        'margin_in_percentage',
+        'driver_name',
+        'status_desc',
+        'staff_name',
+        'user_name',
+        'user_photo',
+        'signature_user_path',
+        'signature_driver_path',
+        'signature_staff_path',
+        'truck',
+        'created_at_idn',
+        'updated_at_idn',
     ];
+
+    public function getSignatureUserPathAttribute()
+    {
+        return asset($this->photo_sign_owner);
+    }
+
+    public function getSignatureDriverPathAttribute()
+    {
+        return asset($this->photo_sign_driver);
+    }
+
+    public function getSignatureStaffPathAttribute()
+    {
+        return asset($this->photo_sign_staff);
+    }
+
+    public function getRealCalculationPriceAttribute()
+    {
+        $totalWeight = $this->getTotalWeightAttribute();
+        $priceObject = Price::latest()->first();
+        return number_format(($priceObject->price) *
+            ($this->total_weight - ($this->total_weight * $priceObject->margin)),
+            2, ',', '.');
+    }
+
+    public function getTotalWeightAttribute()
+    {
+        $rsScaleData = RsScale::where('rs_id', '=', $this->id)->orderBy('id', 'DESC')->get();
+        $total_weight = 0.0;
+        foreach ($rsScaleData as $item) {
+            $total_weight += $item['result'];
+        }
+
+        return $total_weight;
+    }
 
     public function getCreatedAtIdnAttribute()
     {
@@ -62,7 +116,7 @@ class RequestSell extends Model
     {
         $priceObject = Price::latest()->first();
         return number_format(($priceObject->price) *
-            ($this->est_weight - ($this->est_weight * $priceObject->est_price)),
+            ($this->est_weight - ($this->est_weight * $priceObject->margin)),
             2, ',', '.');
     }
 

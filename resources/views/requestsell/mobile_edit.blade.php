@@ -2,9 +2,9 @@
 
 
 @section('page-content')
-{{--    <section class="section">--}}
-{{--        @include('components.message')--}}
-{{--    </section>--}}
+    <section class="section">
+        @include('components.message')
+    </section>
 
     <section class="section">
 
