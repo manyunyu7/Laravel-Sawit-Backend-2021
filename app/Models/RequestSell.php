@@ -40,25 +40,35 @@ class RequestSell extends Model
 
     public function getSignatureUserPathAttribute()
     {
+        if ($this->photo_sign_owner==""){
+            return "";
+        }
         return asset($this->photo_sign_owner);
     }
 
     public function getSignatureDriverPathAttribute()
     {
+        if ($this->photo_sign_driver==""){
+            return "";
+        }
         return asset($this->photo_sign_driver);
     }
 
     public function getSignatureStaffPathAttribute()
     {
+        if ($this->photo_sign_staff==""){
+            return "";
+        }
         return asset($this->photo_sign_staff);
     }
 
     public function getRealCalculationPriceAttribute()
     {
         $totalWeight = $this->getTotalWeightAttribute();
-        $priceObject = Price::latest()->first();
-        return number_format(($priceObject->price) *
-            ($this->total_weight - ($this->total_weight * $priceObject->margin)),
+        $finalPrice = $this->final_price;
+        $finalMargin = $this->final_margin;
+        return number_format(($finalPrice) *
+            ($this->total_weight - ($this->total_weight * $finalMargin)),
             2, ',', '.');
     }
 
@@ -91,16 +101,6 @@ class RequestSell extends Model
     }
 
     function getMarginInPercentageAttribute()
-    {
-        return $this->est_margin * 100;
-    }
-
-    function getFinalPriceAttribute()
-    {
-        return $this->est_margin * 100;
-    }
-
-    function getFinalWeightAttribute()
     {
         return $this->est_margin * 100;
     }

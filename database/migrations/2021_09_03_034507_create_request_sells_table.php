@@ -23,6 +23,10 @@ class CreateRequestSellsTable extends Migration
             $table->string('est_weight')->nullable();
             $table->string('est_margin')->nullable();
             $table->string('est_price')->nullable();
+            $table->string('final_price')->nullable();
+            $table->string('final_margin')->nullable();
+            $table->string('price_paid')->nullable();
+            $table->string('finished_at')->nullable();
             $table->string('address')->nullable();
             $table->string('lat')->nullable();
             $table->string('long')->nullable();

@@ -86,9 +86,9 @@ class RequestSellController extends Controller
 
             $file = $request->file('photo');
             $extension = $file->getClientOriginalExtension(); // you can also use file name
-            $fileName = $object->id . '_' . time() . '.' . $extension;
+            $fileName = "signature_" . $object->id . '_' . $type . '.' . $extension;
 
-            $savePath = "/web_files/request_sell/$id/signature";
+            $savePath = "/web_files/request_sell/$id/";
             $savePathDB = "$savePath$fileName";
             $path = public_path() . "$savePath";
             $upload = $file->move($path, $fileName);
