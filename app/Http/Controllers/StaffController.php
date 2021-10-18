@@ -73,6 +73,11 @@ class StaffController extends Controller
         }
     }
 
+    function getUserByID(Request $request, $id)
+    {
+        $data = User::findOrFail($id);
+        return $data;
+    }
 
     function update(Request $request)
     {

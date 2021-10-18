@@ -40,7 +40,7 @@ class RequestSell extends Model
 
     public function getSignatureUserPathAttribute()
     {
-        if ($this->photo_sign_owner==""){
+        if ($this->photo_sign_owner == "") {
             return "";
         }
         return asset($this->photo_sign_owner);
@@ -48,7 +48,7 @@ class RequestSell extends Model
 
     public function getSignatureDriverPathAttribute()
     {
-        if ($this->photo_sign_driver==""){
+        if ($this->photo_sign_driver == "") {
             return "";
         }
         return asset($this->photo_sign_driver);
@@ -56,7 +56,7 @@ class RequestSell extends Model
 
     public function getSignatureStaffPathAttribute()
     {
-        if ($this->photo_sign_staff==""){
+        if ($this->photo_sign_staff == "") {
             return "";
         }
         return asset($this->photo_sign_staff);
@@ -67,9 +67,12 @@ class RequestSell extends Model
         $totalWeight = $this->getTotalWeightAttribute();
         $finalPrice = $this->final_price;
         $finalMargin = $this->final_margin;
-        return number_format(($finalPrice) *
-            ($this->total_weight - ($this->total_weight * $finalMargin)),
-            2, ',', '.');
+
+        if($finalMargin==null || $finalMargin==""){
+            $finalMargin=0;
+        }
+        return ($finalPrice) *
+            ($this->total_weight - ($this->total_weight * $finalMargin));
     }
 
     public function getTotalWeightAttribute()
@@ -107,17 +110,15 @@ class RequestSell extends Model
 
     function getResultEstPriceOldAttribute()
     {
-        return number_format(($this->est_price) *
-            ($this->est_weight - ($this->est_weight * $this->est_margin)),
-            2, ',', '.');
+        return ($this->est_price) *
+            ($this->est_weight - ($this->est_weight * $this->est_margin));
     }
 
     function getResultEstPriceNowAttribute()
     {
         $priceObject = Price::latest()->first();
-        return number_format(($priceObject->price) *
-            ($this->est_weight - ($this->est_weight * $priceObject->margin)),
-            2, ',', '.');
+        return ($priceObject->price) *
+            ($this->est_weight - ($this->est_weight * $priceObject->margin));
     }
 
     function getPhotoPathAttribute()

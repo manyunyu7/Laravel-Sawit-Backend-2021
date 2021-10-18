@@ -23,7 +23,7 @@ class RequestSellController extends Controller
      */
     public function viewManage()
     {
-        $datas = RequestSell::all();
+        $datas = RequestSell::orderBy('id','desc')->get();
         return view('requestsell.manage')->with(compact('datas'));
     }
 
@@ -273,6 +273,60 @@ class RequestSellController extends Controller
             return back()->with(["success" => "Berhasil Mengganti Staff"]);
         } else {
             return back()->with(["error" => "Gagal Mengganti Staff"]);
+        }
+    }
+
+    public function storeFinal(Request $request)
+    {
+        $rules = [
+            'final_price' => 'required',
+            'final_margin' => 'required',
+            'price_paid' => 'required',
+        ];
+
+        $customMessages = [
+            'required' => 'Mohon Isi Kolom :attribute terlebih dahulu'
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $finalPrice = ($request->final_price);
+        $finalMargin = ($request->final_margin);
+        $pricePaid = ($request->price_paid);
+
+//        $finalPrice = filter_var($request->final_price, FILTER_SANITIZE_NUMBER_INT);
+//        $finalMargin = filter_var($request->final_marign, FILTER_SANITIZE_NUMBER_INT);
+//        $pricePaid = filter_var($request->price_paid, FILTER_SANITIZE_NUMBER_INT);
+
+        $data = RequestSell::findOrFail($request->id);
+        $data->final_price = $finalPrice;
+        $data->final_margin = $finalMargin;
+        $data->price_paid = $pricePaid;
+        $data->finished_at = time();
+        $data->status = 1;
+
+        if ($data->save()) {
+
+            $notifTitle = "Transaksi " . $data->rs_code;
+            $notifMessage = "Proses Transaksi $data->rs_code Telah Selesai";
+            $historyMessage = "Transaksi $data->rs_code Telah Selesai, Invoice Dapat Dilihat pada menu invoice";
+            $this->insertHistory($data, $historyMessage);
+
+            RazkyFeb::insertNotification(
+                $data->user_id,
+                $notifTitle,
+                $notifMessage,
+                $historyMessage,
+                2
+            );
+            if (RazkyFeb::isAPI())
+                return RazkyFeb::success(200, "Berhasil Menyelesaikan Transaksi");
+
+            return back()->with(["success" => "Berhasil Menyelesaikan Transaksi"]);
+        } else {
+            if (RazkyFeb::isAPI())
+                return RazkyFeb::error(400, "Gagal Menyelesaikan Transaksi");
+
+            return back()->with(["error" => "Gagal Menyelesaikan Transaksi"]);
         }
     }
 

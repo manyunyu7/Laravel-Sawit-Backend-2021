@@ -32,6 +32,7 @@ Route::post('auth/register', 'CustomAuthController@register');
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::prefix('user')->group(function () {
+        Route::get('/{id}/profile', 'StaffController@getUserByID');
         Route::post('/update-photo', 'StaffController@updateProfilePhoto');
         Route::post('/update-data', 'StaffController@update');
         Route::post('/change-password', 'StaffController@updatePassword');
@@ -47,6 +48,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::get('/{id}/detail', 'RequestSellController@viewDetail');
         Route::post('/update-status', "RequestSellController@changeStatus");
         Route::post('/{id}/store-signature', "RequestSellController@storeSignature");
+        Route::post('/{id}/store-final', "RequestSellController@storeFinal");
 
         // for scaling
         $cr2 = "RsScaleController";

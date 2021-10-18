@@ -46,12 +46,12 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Margin Jual</label>
-                                <input type="number" required class="form-control" name="margin" id=""
+                                <input type="number" step=".01" required class="form-control" name="margin" id=""
                                     aria-describedby="helpId" placeholder="Margin dalam">
                                 <small id="helpId" class="form-text text-muted">Margin Harga Jual</small>
                             </div>
 
-                       
+
                         </div>
 
                         <div class="col-md-6">
@@ -149,7 +149,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        Added Stock can't be deleted or edited ( one way only ). 
+                                        Added Stock can't be deleted or edited ( one way only ).
                                         <strong>Please double check the data</strong>
                                     </div>
                                     <div class="modal-footer">
@@ -221,7 +221,7 @@
 
 
         });
-        
+
         var el = document.getElementById('formFile');
         el.onchange = function() {
             var fileReader = new FileReader();
