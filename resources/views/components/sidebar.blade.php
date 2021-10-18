@@ -53,7 +53,23 @@
                         <li class="submenu-item  {{ (Request::is('/rs/manage')) ? 'active' : ''}}">
                             <a href="{{url('rs/manage')}}">Semua Request</a>
                         </li>
+                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=3')) ? 'active' : ''}}">
+                            <a href="{{url('rs/manage?status=3')}}">Menunggu Diproses</a>
+                        </li>
+                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=2')) ? 'active' : ''}}">
+                            <a href="{{url('rs/manage?status=2')}}">Diproses</a>
+                        </li>
+                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=4')) ? 'active' : ''}}">
+                            <a href="{{url('rs/manage?status=4')}}">Penjemputan</a>
+                        </li>
+                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=5')) ? 'active' : ''}}">
+                            <a href="{{url('rs/manage?status=5')}}">Proses Timbang</a>
+                        </li>
+                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=1')) ? 'active' : ''}}">
+                            <a href="{{url('rs/manage?status=1')}}">Sukses</a>
+                        </li>
                     </ul>
+
                 </li>
 
                 <li class="sidebar-item  has-sub {{ (Request::is('news/*')) ? 'active' : ''}}">

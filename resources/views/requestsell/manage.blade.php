@@ -33,6 +33,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Manage Data Permintaan Penjualan</h4>
+                        <h6>Filter : {{$currentStatus}}</h6>
                     </div>
 
                     <div class="card-body">

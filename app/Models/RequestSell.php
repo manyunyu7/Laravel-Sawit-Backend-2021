@@ -68,8 +68,8 @@ class RequestSell extends Model
         $finalPrice = $this->final_price;
         $finalMargin = $this->final_margin;
 
-        if($finalMargin==null || $finalMargin==""){
-            $finalMargin=0;
+        if ($finalMargin == null || $finalMargin == "") {
+            $finalMargin = 0;
         }
         return ($finalPrice) *
             ($this->total_weight - ($this->total_weight * $finalMargin));
@@ -176,35 +176,37 @@ class RequestSell extends Model
         else return "";
     }
 
-    public function getStatusDescAttribute()
+    public static function defineStatus($status)
     {
         $retVal = "";
-        switch ($this->status) {
+        switch ($status) {
             case "3" :
-                return "Menunggu Diproses";
+                $retVal = "Menunggu Diproses";
                 break;
             case "2" :
-                return "Diproses";
+                $retVal = "Diproses";
                 break;
             case "4" :
-                return "Dalam Penjemputan";
+                $retVal = "Dalam Penjemputan";
                 break;
             case "5" :
-                return "Proses Timbang";
+                $retVal = "Proses Timbang";
                 break;
             case "1" :
-                return "Sukses";
+                $retVal = "Sukses";
                 break;
             case "0" :
-                return "Dibatalkan";
+                $retVal = "Dibatalkan";
                 break;
             case "" :
                 break;
         }
-        $user = User::find($this->id);
-        if ($user != null)
-            return $user->name;
-        else return "";
+        return $retVal;
+    }
+
+    public function getStatusDescAttribute()
+    {
+        return $this->defineStatus($this->status);
     }
 
     public function getStatusDesc($status)

@@ -21,10 +21,16 @@ class RequestSellController extends Controller
     /**
      * Show the form for managing existing resource.
      */
-    public function viewManage()
+    public function viewManage(Request $request)
     {
-        $datas = RequestSell::orderBy('id','desc')->get();
-        return view('requestsell.manage')->with(compact('datas'));
+        $currentStatus = "";
+        $datas = RequestSell::orderBy('id', 'desc');
+        if ($request->status != null) {
+            $currentStatus = RequestSell::defineStatus($request->status);
+            $datas = $datas->where('status', '=', $request->status);
+        }
+        $datas = $datas->get();
+        return view('requestsell.manage')->with(compact('datas', 'currentStatus'));
     }
 
     /**
@@ -55,7 +61,6 @@ class RequestSellController extends Controller
         foreach ($rsScaleData as $item) {
             $total_weight += $item['result'];
         }
-
 
         $price = DB::table('price')->latest('created_at')->first();
 
