@@ -68,6 +68,9 @@
                         <li class="submenu-item  {{ (Request::is('/rs/manage?status=1')) ? 'active' : ''}}">
                             <a href="{{url('rs/manage?status=1')}}">Sukses</a>
                         </li>
+                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=0')) ? 'active' : ''}}">
+                            <a href="{{url('rs/manage?status=0')}}">Dibatalkan</a>
+                        </li>
                     </ul>
 
                 </li>

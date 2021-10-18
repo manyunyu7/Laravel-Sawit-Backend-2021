@@ -104,7 +104,7 @@ Route::prefix('rs')->group(function () {
     Route::get('{id}/edit', "$cr@viewUpdate");
     Route::get('{id}/detail', "$cr@viewDetail");
     Route::post('{id}/update', "$cr@update");
-    Route::get('{id}/delete', "$cr@delete");
+    Route::post('{id}/deleteAJAX', "$cr@deleteAJAX");
     Route::post('change-driver', "$cr@changeDriver");
     Route::post('change-staff', "$cr@changeStaff");
     Route::post('change-status', "$cr@changeStatus");

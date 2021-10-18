@@ -65,7 +65,8 @@
                                                 <td>{{ $data->created_at }}</td>
                                                 <td>{{ $data->status_desc}}</td>
                                                 <td>
-                                                    <img height="200px" style="border-radius: 20px"
+                                                    <img height="110px" width="250px"
+                                                         style="border-radius: 20px; object-fit: cover"
                                                          src='{{asset("$data->photo")}}' alt="">
                                                 </td>
                                                 <td>
@@ -113,6 +114,13 @@
                 </div>
                 <div class="modal-body">
                     Aksi Ini Tidak Dapat Dibatalkan
+
+                    <div class="form-group">
+                        <label for="">Alasan Pembatalan</label>
+                        <input type="text"
+                               class="form-control" id="txt_reason" aria-describedby="helpId" placeholder="">
+                        <small id="helpId" class="form-text text-muted">Alasan Pembatalan</small>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary hide-modal" data-dismiss="modal">
@@ -120,12 +128,12 @@
                         <span class=" d-sm-block">Close</span>
                     </button>
 
-                    <a class="btn-destroy" href="">
+                    <btn class="btn-destroy" href="">
                         <button type="button" class="btn btn-danger ml-1 hide-modal " data-dismiss="modal">
                             <i class="bx bx-check d-block d-sm-none"></i>
                             <span class=" d-sm-block">Delete</span>
                         </button>
-                    </a>
+                    </btn>
 
                 </div>
             </div>
@@ -178,11 +186,43 @@
 
         });
 
+        var id = ""
         $('body').on("click", ".btn-delete", function () {
-            var id = $(this).attr("id")
-            $(".btn-destroy").attr("href", window.location.origin + "/news/" + id + "/delete")
+            id = $(this).attr("id")
+            // $(".btn-destroy").attr("href", window.location.origin + "/rs/" + id + "/delete")
             $("#destroy-modal").modal("show")
         });
+
+        $(".btn-destroy").on("click", function () {
+            console.log(id);
+            $.ajax({
+                url: "{{ URL::to('/') }}/rs/" + id + "/deleteAJAX",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "reason": $('#txt_reason').val(),
+                    "id": id,
+                },
+                method: "POST",
+                success: function (data, textStatus, jqXHR) {
+                    console.log(jqXHR.toString());
+                    console.log("data " + data);
+                    if (data == "1") {
+                        alert("Data Sukses Dihapus");
+                    } else {
+                        alert("Data Gagal Dihapus");
+                    }
+                    window.location.reload();
+                    $("#destroy-modal").modal("hide")
+                },
+                error: function (xhr, error, code) {
+                    alert(error)
+                    var err = eval("(" + xhr.responseText + ")");
+                    console.log(error);
+                    console.log(err);
+                }
+            });
+        })
+
     </script>
 
 

@@ -33,6 +33,18 @@ class RequestSellController extends Controller
         return view('requestsell.manage')->with(compact('datas', 'currentStatus'));
     }
 
+
+    function deleteAJAX($id, Request $request)
+    {
+        $object = RequestSell::find($id);
+        $object->status = 0;
+        $object->reason = $request->reason;
+        if ($object->save()){
+            return "1";
+        }else{
+            return "0";
+        }
+    }
     /**
      * Show the edit form for editing armada
      *
@@ -475,8 +487,13 @@ class RequestSellController extends Controller
         $isFromUser = true;
         $user = User::find($id);
 
+        $role="";
         if ($user != null)
             $role = $user->role;
+
+        if ($role==1){
+            $role="all";
+        }
 
         $status = $request->status;
         $perPage = $request->per_page;
@@ -489,7 +506,7 @@ class RequestSellController extends Controller
         // then show all data directly
         if ($request->is_paginate == null || $request->is_paginate == "false") {
             // Check if id is all
-            if ($id == "all") {
+            if ($id == "all" || $role=="all") {
                 $datas = RequestSell::orderBy('id', 'desc')->get();
             } else {
                 if ($user->role == 2)
@@ -505,7 +522,7 @@ class RequestSellController extends Controller
         } else {
             // Check if id is all
             // which mean, API will response all
-            if ($id == "all") {
+            if ($id == "all" || $role=="all") {
                 // Check if status filter is not null
                 if ($status != null) {
                     $datas =
