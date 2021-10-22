@@ -148,12 +148,15 @@ class CustomAuthController extends Controller
      */
     protected function respondWithToken($token,$message)
     {
+
+        $expirationInMinutes = 525960;
+        auth('api')->setTTL($expirationInMinutes);
         return response()->json([
             'status_code' => 1,
             'message' => $message,
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 9999 ,
+            'expires_in' => auth('api')->factory()->getTTL() ,
             'user' => auth()->user()
         ]);
     }

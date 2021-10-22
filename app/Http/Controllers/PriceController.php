@@ -137,7 +137,7 @@ class PriceController extends Controller
 //            'message' => 'Sell Request has Failed',
 //        ],401);
 
-        $data = Price::all();
+        $data = Price::orderBy('id','desc')->get();
         $latestPriceObject = Price::latest()->first();
         $latestPrice = 0;
         $latestMargin = 0;

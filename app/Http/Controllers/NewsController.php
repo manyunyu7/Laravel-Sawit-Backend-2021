@@ -141,6 +141,7 @@ class NewsController extends Controller
 
     public function get(Request $request)
     {
+
         $datas = News::all();
         if ($request->type != "") {
             $datas = News::where('type', '=', $request->type)->get();
