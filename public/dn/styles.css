@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,700&display=swap');
+
+@font-face {
+    font-family: gloss;
+    src: url(assets/gloss-and-bloom/gloss.ttf);
+}
+
+p{
+    transition: all ease 3s;
+}
+
+p:hover{
+    /* size: 10%;
+    transform: scale(0.99) translateY(5px);
+    color: aqua; */
+}

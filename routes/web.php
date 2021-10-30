@@ -19,6 +19,7 @@ Route::get('/', function () {
 });
 
 Route::view('/template/home', 'template');
+Route::view('/download/', 'download');
 
 Auth::routes();
 
