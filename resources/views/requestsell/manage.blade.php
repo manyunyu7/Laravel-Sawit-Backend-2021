@@ -63,7 +63,11 @@
                                                 <td>{{ $data->user_name }}</td>
                                                 <td>{{ $data->est_weight}} Kg</td>
                                                 <td>{{ $data->created_at }}</td>
-                                                <td>{{ $data->status_desc}}</td>
+                                                <td>{{ $data->status_desc}}
+                                                    @if($data->status==0)
+                                                        karena  <strong> {{$data->reason}} </strong>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <img height="110px" width="250px"
                                                          style="border-radius: 20px; object-fit: cover"

@@ -36,6 +36,7 @@ class RequestSellController extends Controller
 
     function deleteAJAX($id, Request $request)
     {
+//        return $request->all();
         $object = RequestSell::find($id);
         $object->status = 0;
         $object->reason = $request->reason;

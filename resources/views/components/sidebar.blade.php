@@ -42,8 +42,19 @@
                     </ul>
                 </li>
 
-                <li class="sidebar-title">Penjualan Sawit</li>
+                <li class="sidebar-item  has-sub {{ (Request::is('admin/user/*')) ? 'active' : ''}}">
+                    <a href="#" class='sidebar-link'>
+                        <i class="bi bi-stack"></i>
+                        <span>Notification Center</span>
+                    </a>
+                    <ul class="submenu  {{ (Request::is('notification-center/*')) ? 'active' : ''}} ">
+                        <li class="submenu-item  {{ (Request::is('/landing-notif/manage')) ? 'active' : ''}}">
+                            <a href="{{url('/landing-notif/manage')}}">Landing Notif</a>
+                        </li>
+                    </ul>
+                </li>
 
+                <li class="sidebar-title">Penjualan Sawit</li>
                 <li class="sidebar-item  has-sub {{ (Request::is('rs/*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>

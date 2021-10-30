@@ -64,6 +64,10 @@ Route::group(['middleware' => ['auth:api']], function () {
         Route::get('/get', 'NewsController@get');
     });
 
+    Route::prefix('landing-notif')->group(function () {
+        Route::get('/get', 'LandingNotifController@get');
+    });
+
     Route::prefix('mnotification')->group(function () {
         Route::get('get', 'MNotificationController@getByUser');
         Route::get('user/{id}', 'MNotificationController@getByUser');

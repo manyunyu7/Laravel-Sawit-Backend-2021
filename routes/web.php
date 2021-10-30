@@ -36,6 +36,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/history', 'OutbondController@viewManage');
     });
 
+    Route::prefix('landing-notif')->group(function () {
+        Route::get('/manage', 'LandingNotifController@viewManage');
+        Route::post('/store', 'LandingNotifController@store');
+        Route::get('/{id}/delete', [App\Http\Controllers\LandingNotifController::class, 'destroy']);
+
+    });
+
 
     Route::post('/user/store', [App\Http\Controllers\StaffController::class, 'store']);
     Route::post('/user/update', [App\Http\Controllers\StaffController::class, 'update']);
