@@ -67,7 +67,7 @@
                     <br>
                     <br>
                     <h4><a class="font-bold text-center mt-4" style="text-align: center" href="#">Crafted for CV Sawit Jaya</a>.</h4>
-                    <h4><a class=" text-center mt-4" style="text-align: center" href="{{url('download')}}">Download Aplikasi Android</a>.</h4>
+                    <h6><a class=" text-center mt-4" style="text-align: center" href="{{url('download')}}">Klik Disini Untuk Download Aplikasi Android</a>.</h6>
 
                 </div>
             </div>
