@@ -16,7 +16,7 @@
     <div id="auth">
 
         <div class="row h-100">
-         
+
             <div class="col-lg-7 d-none d-lg-block">
                 <div id="auth-right">
 
@@ -67,6 +67,7 @@
                     <br>
                     <br>
                     <h4><a class="font-bold text-center mt-4" style="text-align: center" href="#">Crafted for CV Sawit Jaya</a>.</h4>
+                    <h4><a class=" text-center mt-4" style="text-align: center" href="{{url('download')}}">Download Aplikasi Android</a>.</h4>
 
                 </div>
             </div>
