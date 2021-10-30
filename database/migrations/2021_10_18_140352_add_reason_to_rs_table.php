@@ -26,7 +26,7 @@ class AddReasonToRsTable extends Migration
     public function down()
     {
         Schema::table('request_sells', function (Blueprint $table) {
-            $table->dropColumn('request_sells');
+            $table->dropColumn('reason');
         });
     }
 }
