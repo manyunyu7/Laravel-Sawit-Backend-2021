@@ -87,7 +87,7 @@
                             <div class="form-group">
                                 <label for="">Konten Berita</label>
                                 <textarea class="form-control" style="height: 300px !important;" name="news_content" id="summernote" rows="10"
-                                          placeholder="Konten Berita">{{old('news_content',$data->content)}}</textarea>
+                                          placeholder="Konten Berita">{!! $data->content !!}</textarea>
                             </div>
                         </div>
 

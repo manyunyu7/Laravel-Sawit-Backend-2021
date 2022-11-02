@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SummerNoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -126,3 +127,7 @@ Route::prefix('rs')->group(function () {
     Route::get('{id}/scale/get', "$cr2@store");
     Route::post('{id}/scale/{id_scale}/delete', "$cr2@delete");
 });
+
+
+Route::post('summernote-image', [SummerNoteController::class, 'store']);
+Route::post('summernote-image-delete', [SummerNoteController::class, 'destroyImage']);

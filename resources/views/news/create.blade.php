@@ -61,6 +61,10 @@
                             </div>
 
 
+
+                        </div>
+
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label for="">Konten Berita</label>
                                 <textarea class="form-control" name="news_content" id="summernote" rows="10"
@@ -106,21 +110,65 @@
         $('#summernote').summernote({
             tabsize: 2,
             height: 120,
-        })
-        $("#hint").summernote({
-            height: 100,
-            toolbar: false,
-            placeholder: 'type with apple, orange, watermelon and lemon',
-            hint: {
-                words: ['apple', 'orange', 'watermelon', 'lemon'],
-                match: /\b(\w{1,})$/,
-                search: function (keyword, callback) {
-                    callback($.grep(this.words, function (item) {
-                        return item.indexOf(keyword) === 0;
-                    }));
+            callbacks: {
+                onImageUpload: function(files, editor, welEditable) {
+                    sendFile(files[0], editor, welEditable);
+                },
+                onMediaDelete : function(target) {
+                    alert(target[0].src)
+                    alert("On Media Delete")
+                    deleteFile(target[0].src);
                 }
             }
-        });
+        })
+
+        function deleteFile(src) {
+            var host = window.location.origin;
+            $.ajax({
+                data: {src : src},
+                type: "POST",
+                url: host+"/summernote-image-delete", // replace with your url
+                cache: false,
+                success: function(resp) {
+                    console.log(resp);
+                    console.log("Success Delete Image")
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    let error = (textStatus+" "+errorThrown);
+                    console.log(error)
+                    alert(error + jqXHR.responseText)
+                }
+            });
+        }
+
+        function sendFile(file, editor, welEditable) {
+
+            var host = window.location.origin;
+            data = new FormData();
+            data.append("file", file);
+            $.ajax({
+                data: data,
+                type: 'POST',
+                url: host + '/summernote-image',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(url) {
+                    alert(url)
+                    var image = $('<img>').attr('src', url);
+                    $('#summernote').summernote('insertImage', url, url);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    let error = (textStatus+" "+errorThrown);
+                    console.log(error)
+                    alert(error + jqXHR.responseText)
+                }
+            });
+        }
+
+        function progressHandlingFunction(e){
+
+        }
     </script>
     <script>
         var el = document.getElementById('formFile');

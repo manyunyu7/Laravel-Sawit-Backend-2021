@@ -7,6 +7,7 @@ use App\Models\UserMNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use PHPUnit\Exception;
 
 class RazkyFeb
 {
@@ -63,6 +64,17 @@ class RazkyFeb
         // remove photo first
         if (!Str::contains($file_path, 'razky_samples'))
             File::delete($file_path);
+
+        if (Str::contains($file_path,"http")){
+            try {
+                $path = parse_url($file_path, PHP_URL_PATH);
+                $absolute_path =  $_SERVER['DOCUMENT_ROOT'] . $path;
+                unlink($absolute_path);
+            } catch (Exception $e) {
+
+            }
+        }
+
         // if (file_exists($file_path)) {
         //     try {
         //         unlink($file_path);
@@ -72,15 +84,18 @@ class RazkyFeb
         // }
     }
 
-    public static function logout(){
+    public static function logout()
+    {
         return response()->json(['error' => 'Unauthenticated.'], 401);
     }
 
-    public static function error($code,$message){
+    public static function error($code, $message)
+    {
         return response()->json(['message' => "$message"], $code);
     }
 
-    public static function success($code,$message){
+    public static function success($code, $message)
+    {
         return response()->json(['message' => "$message"], $code);
     }
 
