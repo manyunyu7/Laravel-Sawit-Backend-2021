@@ -74,7 +74,9 @@
                                 <select class="form-control form-select" required name="user_role" id="">
                                     <option>Pilih User Role</option>
                                     <option {{($users->role==1) ? 'selected' : ''}}  value="1">Admin</option>
-                                    <option {{($users->role==2) ? 'selected' : ''}} value="2">Karyawan</option>
+                                    <option {{($users->role==2) ? 'selected' : ''}} value="2">Commercial</option>
+                                    <option {{($users->role==3) ? 'selected' : ''}} value="2">Customer</option>
+                                    <option {{($users->role==4) ? 'selected' : ''}} value="2">Warehouse</option>
                                 </select>
                             </div>
                         </div>

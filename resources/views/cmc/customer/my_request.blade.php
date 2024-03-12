@@ -5,13 +5,13 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Manajemen User</h3>
-                    <p class="text-subtitle text-muted">Gunakan Menu Ini untuk melakukan manajemen user</p>
+                    <h3>Manage Permintaan</h3>
+                    <p class="text-subtitle text-muted">Permintaan Saya</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">User</a></li>
+                            <li class="breadcrumb-item"><a href="#">Permintaan</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Manage</li>
                         </ol>
                     </nav>
@@ -32,52 +32,45 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Manage Data User</h4>
+                        <h4 class="card-title">Lihat Seluruh Pemintaan Saya</h4>
                     </div>
 
                     <div class="card-body">
 
                         <div class="table-responsive">
-
                             <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                                 <div class="dataTable-container">
                                     <table class="table table-striped dataTable-table" id="table_data">
                                         <thead>
                                             <tr>
-                                                <th data-sortable="">No</th>
-                                                <th data-sortable="">Role</th>
-                                                <th data-sortable="">Nama</th>
-                                                <th data-sortable="">Photo</th>
-                                                <th data-sortable="">Email</th>
-                                                <th data-sortable="">Kontak</th>
-                                                <th data-sortable="">Dibuat</th>
-                                                <th data-sortable="">Edit</th>
-                                                <th data-sortable="">Hapus</th>
+                                                <th data-sortable="" class="text-nowrap">No</th>
+                                                <th data-sortable="" class="text-nowrap">Nomor Surat Jalan</th>
+                                                <th data-sortable="" class="text-nowrap">Dijual Kepada</th>
+                                                <th data-sortable="" class="text-nowrap">Dikirim Ke</th>
+                                                <th data-sortable="" class="text-nowrap">Alamat Pengambilan</th>
+                                                <th data-sortable="" class="text-nowrap">Disiapkan Oleh</th>
+                                                <th data-sortable="" class="text-nowrap">Tanggal</th>
+                                                <th data-sortable="" class="text-nowrap"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($users as $user)
+                                            @forelse ($datas as $data)
+
+                                                @php
+                                                    $disiapkanOlehName = \App\Models\User::findOrFail($data->disiapkan_oleh)->name;
+                                                @endphp
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $user->name }}</td>
-                                                    <td>{{ $user->role_desc }}</td>
+                                                    <td>{{ $data->nomor_surat_jalan }}</td>
+                                                    <td>{{ $data->dijual_kepada }}</td>
+                                                    <td>{{ $data->dikirim_ke }}</td>
+                                                    <td>{{ $data->alamat_pengambilan }}</td>
+                                                    <td>{{ $disiapkanOlehName }}</td>
+                                                    <td>{{ $data->created_at }}</td>
                                                     <td>
-                                                        <div class="avatar avatar-lg">
-                                                            <img src="{{asset($user->photo)}}">
-                                                        </div>
-                                                    </td>
-                                                    <td>{{ $user->email }}</td>
-                                                    <td>{{ $user->contact }}</td>
-                                                    <td>{{ $user->created_at }}</td>
-                                                    <td>
-                                                        <button id="{{ $user->id }}"  data-toggle="modal" type="button"
-                                                            class="btn btn-primary btn-delete">Hapus
-                                                            User</button>
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{url('admin/user/'.$user->id.'/edit')}}">
-                                                            <button id="{{ $user->id }}"  type="button"
-                                                          class="btn btn-primary">Edit User</button>
+                                                        <a href="{{url('cmc/'.$data->id.'/edit')}}">
+                                                            <button id="{{ $data->id }}"  type="button"
+                                                          class="btn btn-primary text-nowrap">Edit Data</button>
                                                         </a>
 
                                                     </td>
@@ -105,14 +98,14 @@
             <div class="modal-content">
                 <div class="modal-header bg-danger">
                     <h5 class="modal-title white" id="myModalLabel120">
-                        Anda Yaking Ingin Menghapus Data Karyawan Ini ?
+                        Apakah Anda Yakin ingin menghapus data ini ?
                     </h5>
                     <button type="button" class="close hide-modal" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Data Karyawan terkait akan dihapus.
+                    Aksi Ini Tidak Dapat Dibatalkan
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary hide-modal" data-dismiss="modal">
@@ -123,7 +116,7 @@
                     <a class="btn-destroy" href="">
                         <button type="button" class="btn btn-danger ml-1 hide-modal " data-dismiss="modal">
                             <i class="bx bx-check d-block d-sm-none"></i>
-                            <span class=" d-sm-block">Hapus Karyawan</span>
+                            <span class=" d-sm-block">Delete</span>
                         </button>
                     </a>
 
@@ -147,14 +140,6 @@
     <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js">
     </script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js">
-    </script>
-
-    <script>
-        $('body').on("click", ".btn-delete", function() {
-            var id = $(this).attr("id")
-            $(".btn-destroy").attr("href", window.location.origin + "/user/" + id + "/delete")
-            $("#destroy-modal").modal("show")
-        });
     </script>
 
     <script type="text/javascript">
@@ -188,7 +173,7 @@
 
         $('body').on("click", ".btn-delete", function() {
             var id = $(this).attr("id")
-            $(".btn-destroy").attr("href", window.location.origin + "/user/" + id + "/delete")
+            $(".btn-destroy").attr("href", window.location.origin + "/armada/" + id + "/delete")
             $("#destroy-modal").modal("show")
         });
     </script>

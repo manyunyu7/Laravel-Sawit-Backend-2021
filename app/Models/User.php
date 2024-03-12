@@ -42,11 +42,14 @@ class User extends Authenticatable implements JWTSubject
     function getRoleDescAttribute(){
         $retVal = "";
         switch ($this->role){
+            case 4:
+                return "Warehouse";
+                break;
             case 3:
-                return "User";
+                return "Customer";
                 break;
             case 2 :
-                return "Staff";
+                return "Commercial";
                 break;
             case 1 :
                 return "Admin";

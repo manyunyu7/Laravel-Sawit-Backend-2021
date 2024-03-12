@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sawit Jaya</title>
+    <title>Login - CMC</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('/frontend') }}/assets/css/bootstrap.css">
     <link rel="stylesheet" href="{{ asset('/frontend') }}/assets/vendors/bootstrap-icons/bootstrap-icons.css">
@@ -17,18 +17,18 @@
 
         <div class="row h-100">
 
-            <div class="col-lg-7 d-none d-lg-block">
+            <div class="col-lg-0 d-none d-lg-block">
                 <div id="auth-right">
 
                 </div>
             </div>
-            <div class="col-lg-5 col-12">
+            <div class="col-lg-12 col-12">
                 <div id="auth-left">
                     <div class="auth-logo">
                         {{-- <a href="index.html"><img src="{{ asset('/frontend') }}/assets/images/logo/logo.png"
                                 alt="Logo"></a> --}}
 
-                        <h1>Aplikasi Penjualan Tandan Buah Segar</h1>
+                        <h1>Aplikasi Tracking PO</h1>
                     </div>
                     <h1 class="auth-title">Log in.</h1>
                     <p class="auth-subtitle mb-5">Log in with your data that you entered during registration.</p>
@@ -66,8 +66,7 @@
                     </div> --}}
                     <br>
                     <br>
-                    <h4><a class="font-bold text-center mt-4" style="text-align: center" href="#">Crafted for CV Sawit Jaya</a>.</h4>
-                    <h6><a class=" text-center mt-4" style="text-align: center" href="{{url('download')}}">Klik Disini Untuk Download Aplikasi Android</a>.</h6>
+                    <h4><a class="font-bold text-center mt-4" style="text-align: center" href="#">Crafted for CV CMC</a>.</h4>
 
                 </div>
             </div>

@@ -60,6 +60,44 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/material/manage', 'MaterialController@viewManage');
 
 
+    Route::prefix('inbound')->group(function () {
+        Route::get('/create', [App\Http\Controllers\InboundController::class, 'viewCreate']);
+        Route::get('/{id}/cancel', 'InboundController@cancel');
+        Route::post('/store', 'InboundController@store');
+        Route::get('/{id}/edit', 'InboundController@viewEdit');
+        Route::post('/update', 'InboundController@update');
+        Route::get('/{id}/delete', 'InboundController@destroy');
+        Route::get('/report', 'InboundController@viewManage');
+        Route::get('/manage', 'InboundController@viewManage');
+        Route::get('/input-daily', 'InboundController@viewInputDaily');
+        Route::get('/daily-input', 'InboundController@viewInputDaily');
+        Route::post('/daily-input/store', 'InboundController@storeDaily');
+    });
+
+    Route::get('cust/my-cmc-request', 'NewCMCController@myRequestView');
+
+
+    Route::prefix('cmc')->group(function () {
+        Route::get('create-new', 'NewCMCController@newRequest');
+        Route::post('store-new', 'NewCMCController@storeNewRequest')->name("new_po_request.store");
+        Route::get('{id}/edit', 'NewCMCController@editCMCView');
+        Route::post('{id}/update', 'NewCMCController@editCMCView')->name("new_po_request.update");;
+        Route::get('{id}/cancel', 'OutbondController@cancelKeluar');
+        Route::post('/update', 'OutbondController@update');
+        Route::get('{id}/delete', 'OutbondController@destroy');
+        Route::get('manage', 'OutbondController@viewManage');
+    });
+
+
+    Route::prefix('outbond')->group(function () {
+        Route::get('create', 'OutbondController@viewCreate');
+        Route::post('store', 'OutbondController@store');
+        Route::get('{id}/cancel', 'OutbondController@cancelKeluar');
+        Route::post('/update', 'OutbondController@update');
+        Route::get('{id}/delete', 'OutbondController@destroy');
+        Route::get('manage', 'OutbondController@viewManage');
+    });
+
     Route::prefix('price')->group(function () {
         $cr = "PriceController";
         Route::get('create', "$cr@viewCreate");

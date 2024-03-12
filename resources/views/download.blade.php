@@ -130,10 +130,10 @@
     <div class="container">
         <div class="row header">
             <div class="col-md-12">
-                <h1 style="font-family: gloss;">Sawit Jaya<span class="blue-font"></span></h1>
+                <h1 style="font-family: gloss;">CMC<span class="blue-font"></span></h1>
             </div>
             <div class="col-md-12">
-                <h4 class="title">Aplikasi Android Sawit Jaya</h4>
+                <h4 class="title">Aplikasi Android CMC</h4>
             </div>
         </div>
 

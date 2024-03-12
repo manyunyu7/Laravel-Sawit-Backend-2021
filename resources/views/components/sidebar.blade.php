@@ -27,9 +27,18 @@
                     </a>
                 </li>
 
+                <li class="sidebar-item
+                {{(Request::is('cust/my-cmc-request')) ? 'active' : ''}}">
+                    <a href="{{url('cust/my-cmc-request')}}" class='sidebar-link'>
+                        <i class="bi bi-file-text"></i>
+                        <span>Request Saya</span>
+                    </a>
+                </li>
+
+
                 <li class="sidebar-item  has-sub {{ (Request::is('admin/user/*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
+                        <i class="fas fa-users"></i>
                         <span>Manajemen User</span>
                     </a>
                     <ul class="submenu  {{ (Request::is('admin/user/*')) ? 'active' : ''}} ">
@@ -42,53 +51,24 @@
                     </ul>
                 </li>
 
-                <li class="sidebar-item  has-sub {{ (Request::is('admin/user/*')) ? 'active' : ''}}">
+                <li class="sidebar-item d-none  has-sub  {{ Request::is('material/*') ? 'active' : '' }}">
                     <a href="#" class='sidebar-link'>
                         <i class="bi bi-stack"></i>
-                        <span>Notification Center</span>
+                        <span>Material / Bahan</span>
                     </a>
-                    <ul class="submenu  {{ (Request::is('notification-center/*')) ? 'active' : ''}} ">
-                        <li class="submenu-item  {{ (Request::is('/landing-notif/manage')) ? 'active' : ''}}">
-                            <a href="{{url('/landing-notif/manage')}}">Landing Notif</a>
+                    <ul class="submenu  {{ Request::is('material/*') ? 'active' : '' }} ">
+                        <li class="submenu-item   {{ Request::is('material/create') ? 'active' : '' }}">
+                            <a href="{{ url('/material/create') }}">Input Product</a>
+                        </li>
+                        <li class="submenu-item  {{ Request::is('material/manage') ? 'active' : '' }}">
+                            <a href="{{ url('/material/manage') }}">Manage Product</a>
                         </li>
                     </ul>
-                </li>
-
-                <li class="sidebar-title">Penjualan Sawit</li>
-                <li class="sidebar-item  has-sub {{ (Request::is('rs/*')) ? 'active' : ''}}">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
-                        <span>Permintaan Jual</span>
-                    </a>
-                    <ul class="submenu  {{ (Request::is('rs/*')) ? 'active' : ''}} ">
-                        <li class="submenu-item  {{ (Request::is('/rs/manage')) ? 'active' : ''}}">
-                            <a href="{{url('rs/manage')}}">Semua Request</a>
-                        </li>
-                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=3')) ? 'active' : ''}}">
-                            <a href="{{url('rs/manage?status=3')}}">Menunggu Diproses</a>
-                        </li>
-                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=2')) ? 'active' : ''}}">
-                            <a href="{{url('rs/manage?status=2')}}">Diproses</a>
-                        </li>
-                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=4')) ? 'active' : ''}}">
-                            <a href="{{url('rs/manage?status=4')}}">Penjemputan</a>
-                        </li>
-                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=5')) ? 'active' : ''}}">
-                            <a href="{{url('rs/manage?status=5')}}">Proses Timbang</a>
-                        </li>
-                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=1')) ? 'active' : ''}}">
-                            <a href="{{url('rs/manage?status=1')}}">Sukses</a>
-                        </li>
-                        <li class="submenu-item  {{ (Request::is('/rs/manage?status=0')) ? 'active' : ''}}">
-                            <a href="{{url('rs/manage?status=0')}}">Dibatalkan</a>
-                        </li>
-                    </ul>
-
                 </li>
 
                 <li class="sidebar-item  has-sub {{ (Request::is('news/*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
+                        <i class="fas fa-newspaper"></i>
                         <span>Berita</span>
                     </a>
                     <ul class="submenu  {{ (Request::is('news/*')) ? 'active' : ''}} ">
@@ -103,7 +83,7 @@
 
                 <li class="sidebar-item  has-sub {{ (Request::is('armada/*')) ? 'active' : ''}}">
                     <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
+                        <i class="fas fa-truck"></i>
                         <span>Manajemen Armada</span>
                     </a>
                     <ul class="submenu  {{ (Request::is('armada/*')) ? 'active' : ''}} ">
@@ -116,20 +96,6 @@
                     </ul>
                 </li>
 
-                <li class="sidebar-item  has-sub  {{ (Request::is('price/*')) ? 'active' : ''}}">
-                    <a href="#" class='sidebar-link'>
-                        <i class="bi bi-stack"></i>
-                        <span>Harga TBS</span>
-                    </a>
-                    <ul class="submenu  {{ (Request::is('price/*')) ? 'active' : ''}} ">
-                        <li class="submenu-item   {{ (Request::is('price/create')) ? 'active' : ''}}">
-                            <a href="{{url('/price/create')}}">Input Harga TBS</a>
-                        </li>
-                        <li class="submenu-item  {{ (Request::is('price/manage')) ? 'active' : ''}}">
-                            <a href="{{url('/price/manage')}}">Manage Harga TBS</a>
-                        </li>
-                    </ul>
-                </li>
 
                 <li class="sidebar-title">Logout</li>
                 <li class="sidebar-item  ">

@@ -26,7 +26,7 @@
         @include('components.message')
     </section>
 
- 
+
     <section class="section">
         <div class="card">
             <div class="card-header">
@@ -71,7 +71,9 @@
                                 <select class="form-control form-select" required name="user_role" id="">
                                     <option>Pilih User Role</option>
                                     <option value="1">Admin</option>
-                                    <option value="2">Staff</option>
+                                    <option value="2">Commercial</option>
+                                    <option value="3">Customer</option>
+                                    <option value="4">Warehouse</option>
                                 </select>
                             </div>
                         </div>

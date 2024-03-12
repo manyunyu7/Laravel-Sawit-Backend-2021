@@ -99,7 +99,6 @@
 
 @push('page-style')
     <link rel="stylesheet" href="{{ asset('/frontend') }}/assets/vendors/summernote/summernote-lite.min.css">
-
 @endpush
 
 @push('script')
