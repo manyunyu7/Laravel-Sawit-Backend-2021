@@ -11,25 +11,76 @@ use Illuminate\Support\Facades\Auth;
 class NewCMCController extends Controller
 {
 
-    public function editCMCView(Request $request,$id){
+    public function editCMCView(Request $request, $id)
+    {
         $data = PoRequest::findOrFail($id);
         $ekspedisiList = Truck::all();
         $users = User::all();
-        return view('cmc.edit')->with(compact('data','ekspedisiList','users'));
+        if (Auth::user()->role == 4) {
+            $users = User::where("role", '=', '4')->get();
+        }
+        return view('cmc.edit')->with(compact('data', 'ekspedisiList', 'users'));
     }
 
-    public function myRequestView(Request $request){
-        $datas = PoRequest::where('disiapkan_oleh','=',Auth::id())->get();
-        return view('cmc.customer.my_request')->with(compact('datas'));
+    public function commercialRequestView(Request $request)
+    {
+        $datas = PoRequest::where('last_process_by', '=', 3)->get();
+        return view('cmc.my_request')->with(compact('datas'));
     }
 
-    public function newRequest(Request $request){
+    public function warehouseRequestView(Request $request)
+    {
+        $datas = PoRequest::where('last_process_by', '=', 2)->get();
+        return view('cmc.my_request')->with(compact('datas'));
+    }
+
+    public function warehouseInputtedView(Request $request)
+    {
+        $datas = PoRequest::where('last_process_by', '=', 4)->get();
+        $topTitle = "Manage Permintaan";
+        $topSubTitle = "Permintaan Yang Sedang Diantarkan";
+        $bodyTitle = "Permintaan Sedang Diantar";
+        return view('cmc.my_request')->with(
+            compact(
+                'datas',
+                'bodyTitle',
+                'topTitle',
+                'topSubTitle')
+        );
+    }
+
+
+    public function commercialPOInputtedView(Request $request)
+    {
+        $datas = PoRequest::where('last_process_by', '=', 3)->get();
+        $topTitle = "Manage Permintaan";
+        $topSubTitle = "Permintaan Yang Telah Diinput Nomor PO-nya";
+        $bodyTitle = "Permintaan Telah Diinput";
+        return view('cmc.my_request')->with(
+            compact(
+                'datas',
+                'bodyTitle',
+                'topTitle',
+                'topSubTitle')
+        );
+    }
+
+    public function myRequestView(Request $request)
+    {
+        $datas = PoRequest::where('disiapkan_oleh', '=', Auth::id())->get();
+        return view('cmc.my_request')->with(compact('datas'));
+    }
+
+    public function newRequest(Request $request)
+    {
         $ekspedisiList = Truck::all();
         $compact = compact('ekspedisiList');
         return view('cmc.customer.new_request')->with($compact);
     }
 
-    public function storeNewRequest(Request $request){
+    public function storeNewRequest(Request $request)
+    {
+        //new request by customer;
         $poRequest = new PoRequest(); // Replace with your actual model
 
         $poRequest->nomor_surat_jalan = $request->input('nomor_surat_jalan');
@@ -58,6 +109,7 @@ class NewCMCController extends Controller
             ];
         }
 
+        $poRequest->last_process_by = Auth::user()->role;
         $poRequest->products = json_encode($products);
 
         // Save the data
@@ -66,7 +118,59 @@ class NewCMCController extends Controller
         } else {
             return back()->with(["error" => "Saving process failed"]);
         }
+    }
 
+    public function updateRequest(Request $request, $id)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'nomor_surat_jalan' => '',
+            'nomor_surat_jalan_date' => 'date',
+            'order_reference' => '',
+            'order_penjualan_nomor' => '',
+            'ekspedisi' => '',
+            'alamat_pengambilan' => '',
+            'dijual_kepada' => '',
+            'id_driver' => '',
+            'id_armada' => '',
+            'dikirim_ke' => '',
+            'po_number' => '',
+            'comment_commercial' => '',
+            'kode_produk.*' => '',
+            'uraian.*' => '',
+            'jumlah.*' => 'numeric|min:0',
+            'unit.*' => '',
+            'berat_kotor.*' => 'numeric|min:0',
+            'volume.*' => 'numeric|min:0',
+        ]);
+
+        // Find the existing PoRequest instance
+        $poRequest = PoRequest::findOrFail($id);
+
+        // Update the attributes
+        $poRequest->fill($validatedData);
+
+        // Serialize and update the products
+        $products = [];
+//        foreach ($validatedData['kode_produk'] as $key => $kodeProduk) {
+//            $products[] = [
+//                'kode_produk' => $kodeProduk,
+//                'uraian' => $validatedData['uraian'][$key],
+//                'jumlah' => $validatedData['jumlah'][$key],
+//                'unit' => $validatedData['unit'][$key],
+//                'berat_kotor' => $validatedData['berat_kotor'][$key],
+//                'volume' => $validatedData['volume'][$key],
+//            ];
+//        }
+        $poRequest->last_process_by = Auth::user()->role;
+//        $poRequest->products = json_encode($products);
+
+        // Save the updated data
+        if ($poRequest->save()) {
+            return back()->with(["success" => "Data updated successfully"]);
+        } else {
+            return back()->with(["error" => "Update process failed"]);
+        }
     }
 
 }

@@ -4,14 +4,17 @@
             <div class="d-flex justify-content-between">
                 <div class="logo d-flex">
                     <h1 class="mr-3">{{config('app.name')}}</h1>
-                    <a href="{{url('/')}}"><img src="{{asset('frontend/assets/images/logo/logo.png')}}" alt="Logo"
-                                                srcset="" style="height: 70px !important;"></a>
+                    {{--                    <a href="{{url('/')}}"><img src="{{asset('frontend/assets/images/logo/logo.png')}}" alt="Logo"--}}
+                    {{--                                                srcset="" style="height: 70px !important;"></a>--}}
                 </div>
                 <div class="toggler">
                     <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
                 </div>
             </div>
         </div>
+        <p class="sidebar-title" style="margin-left: 30px; margin-right: 20px"><span>Anda Login Sebagai {{Auth::user()->role_desc}} ({{Auth::user()->role}})</span>
+        </p>
+
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Menu</li>
@@ -27,13 +30,52 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item
+
+                @if(Auth::user()->role=="3")
+                    <li class="sidebar-item
                 {{(Request::is('cust/my-cmc-request')) ? 'active' : ''}}">
-                    <a href="{{url('cust/my-cmc-request')}}" class='sidebar-link'>
-                        <i class="bi bi-file-text"></i>
-                        <span>Request Saya</span>
-                    </a>
-                </li>
+                        <a href="{{url('cust/my-cmc-request')}}" class='sidebar-link'>
+                            <i class="bi bi-file-text"></i>
+                            <span>Request Saya</span>
+                        </a>
+                    </li>
+                @endif
+
+
+                @if(Auth::user()->role=="2")
+                    <li class="sidebar-item
+                            {{(Request::is('commercial/my-cmc-request')) ? 'active' : ''}}">
+                        <a href="{{url('commercial/my-cmc-request')}}" class='sidebar-link'>
+                            <i class="bi bi-file-text"></i>
+                            <span>Menunggu Nomor PO</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item
+                            {{(Request::is('commercial/proc-my-cmc-request')) ? 'active' : ''}}">
+                        <a href="{{url('commercial/proc-my-cmc-request')}}" class='sidebar-link'>
+                            <i class="bi bi-check-circle"></i>
+                            <span>Telah Diinput PO</span>
+                        </a>
+                    </li>
+                @endif
+
+                @if(Auth::user()->role=="4")
+                    <li class="sidebar-item
+                            {{(Request::is('warehouse/my-cmc-request')) ? 'active' : ''}}">
+                        <a href="{{url('warehouse/my-cmc-request')}}" class='sidebar-link'>
+                            <i class="bi bi-file-text"></i>
+                            <span>Menunggu Konfirmasi</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item
+                            {{(Request::is('warehouse/proc-my-cmc-request')) ? 'active' : ''}}">
+                        <a href="{{url('warehouse/proc-my-cmc-request')}}" class='sidebar-link'>
+                            <i class="bi bi-truck"></i>
+                            <span>Sedang Diantarkan
+                            </span>
+                        </a>
+                    </li>
+                @endif
 
 
                 <li class="sidebar-item  has-sub {{ (Request::is('admin/user/*')) ? 'active' : ''}}">

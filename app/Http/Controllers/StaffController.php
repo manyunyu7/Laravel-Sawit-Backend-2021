@@ -68,6 +68,7 @@ class StaffController extends Controller
             if (Auth::user()->role == 1) {
                 return back()->with(["success" => "Berhasil Menambahkan User Baru"]);
             }
+            return back()->with(["success" => "Berhasil Menambahkan User Baru"]);
         } else {
             return back()->with(["failed" => "Gagal Menambahkan User Baru"]);
         }

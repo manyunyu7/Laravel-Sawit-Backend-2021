@@ -60,7 +60,7 @@
 
                             <div class="form-group">
                                 <label for="basicInput">Tanggal Order Penjualan</label>
-                                <input type="text" name="order_penjualan_nomor_date" class="form-control" value="{{ old('order_penjualan_nomor_date') }}" id="basicInput" placeholder="Tanggal Order Penjualan">
+                                <input type="datetime-local" name="order_penjualan_nomor_date" class="form-control" value="{{ old('order_penjualan_nomor_date') }}" id="basicInput" placeholder="Tanggal Order Penjualan">
                             </div>
 
                             <!-- Add other fields in a similar manner... -->

@@ -35,6 +35,7 @@ class CreatePoRequestsTable extends Migration
             $table->unsignedBigInteger("ekspedisi")->nullable();
             $table->unsignedBigInteger("id_armada")->nullable();
             $table->unsignedBigInteger("id_driver")->nullable();
+            $table->integer("last_process_by")->nullable();
             $table->foreign('id_armada')->references('id')->on('trucks');
             $table->foreign('id_driver')->references('id')->on('users');
             $table->foreign('disiapkan_oleh')->references('id')->on('users');

@@ -32,52 +32,64 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
+                        <a href="{{url("/cmc/create-new")}}">
+                            <div class="btn btn-outline-primary mb-3">Buat Permintaan Baru</div>
+                        </a>
                         <h4 class="card-title">Lihat Seluruh Pemintaan Saya</h4>
                     </div>
 
                     <div class="card-body">
 
-                        <div class="table-responsive">
-                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+
+                        @if(count($datas) == 0)
+                            <div class="text-center">
+                                <iframe src="https://lottie.host/embed/b4d8d750-88a2-4492-a776-91de77675034/AKuJuLPq5m.json"></iframe>
+                                <p class="text-black">Belum Ada Permintaan Yang Perlu Diproses</p>
+                            </div>
+                        @endif
+                        <div class="table-responsive  @if(count($datas)==0) d-none @endif  ">
+                            <div
+                                class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                                 <div class="dataTable-container">
                                     <table class="table table-striped dataTable-table" id="table_data">
                                         <thead>
-                                            <tr>
-                                                <th data-sortable="" class="text-nowrap">No</th>
-                                                <th data-sortable="" class="text-nowrap">Nomor Surat Jalan</th>
-                                                <th data-sortable="" class="text-nowrap">Dijual Kepada</th>
-                                                <th data-sortable="" class="text-nowrap">Dikirim Ke</th>
-                                                <th data-sortable="" class="text-nowrap">Alamat Pengambilan</th>
-                                                <th data-sortable="" class="text-nowrap">Disiapkan Oleh</th>
-                                                <th data-sortable="" class="text-nowrap">Tanggal</th>
-                                                <th data-sortable="" class="text-nowrap"></th>
-                                            </tr>
+                                        <tr>
+                                            <th data-sortable="" class="text-nowrap">No</th>
+                                            <th data-sortable="" class="text-nowrap">Nomor Surat Jalan</th>
+                                            <th data-sortable="" class="text-nowrap">Dijual Kepada</th>
+                                            <th data-sortable="" class="text-nowrap">Dikirim Ke</th>
+                                            <th data-sortable="" class="text-nowrap">Alamat Pengambilan</th>
+                                            <th data-sortable="" class="text-nowrap">Disiapkan Oleh</th>
+                                            <th data-sortable="" class="text-nowrap">Tanggal</th>
+                                            <th data-sortable="" class="text-nowrap"></th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            @forelse ($datas as $data)
+                                        @forelse ($datas as $data)
 
-                                                @php
-                                                    $disiapkanOlehName = \App\Models\User::findOrFail($data->disiapkan_oleh)->name;
-                                                @endphp
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $data->nomor_surat_jalan }}</td>
-                                                    <td>{{ $data->dijual_kepada }}</td>
-                                                    <td>{{ $data->dikirim_ke }}</td>
-                                                    <td>{{ $data->alamat_pengambilan }}</td>
-                                                    <td>{{ $disiapkanOlehName }}</td>
-                                                    <td>{{ $data->created_at }}</td>
-                                                    <td>
-                                                        <a href="{{url('cmc/'.$data->id.'/edit')}}">
-                                                            <button id="{{ $data->id }}"  type="button"
-                                                          class="btn btn-primary text-nowrap">Edit Data</button>
-                                                        </a>
+                                            @php
+                                                $disiapkanOlehName = \App\Models\User::findOrFail($data->disiapkan_oleh)->name;
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $data->nomor_surat_jalan }}</td>
+                                                <td>{{ $data->dijual_kepada }}</td>
+                                                <td>{{ $data->dikirim_ke }}</td>
+                                                <td>{{ $data->alamat_pengambilan }}</td>
+                                                <td>{{ $disiapkanOlehName }}</td>
+                                                <td>{{ $data->created_at }}</td>
+                                                <td>
+                                                    <a href="{{url('cmc/'.$data->id.'/edit')}}">
+                                                        <button id="{{ $data->id }}" type="button"
+                                                                class="btn btn-primary text-nowrap">Edit Data
+                                                        </button>
+                                                    </a>
 
-                                                    </td>
-                                                </tr>
-                                            @empty
+                                                </td>
+                                            </tr>
+                                        @empty
 
-                                            @endforelse
+                                        @endforelse
 
                                         </tbody>
                                     </table>
@@ -93,7 +105,8 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="destroy-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade" id="destroy-modal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-danger">
@@ -125,25 +138,26 @@
         </div>
     </div>
 
-
 @endsection
 
 
 @push('script')
     <script type="text/javascript"
-        src="https://cdn.datatables.net/v/bs4-4.1.1/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.js">
+            src="https://cdn.datatables.net/v/bs4-4.1.1/jszip-2.5.0/dt-1.10.23/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.js">
     </script>
     <script type="text/javascript" charset="utf8"
-        src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+            src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js">
     </script>
-    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js">
+    <script type="text/javascript" charset="utf8"
+            src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js">
     </script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js">
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js">
     </script>
 
     <script type="text/javascript">
-        $(function() {
+        $(function () {
             var table = $('#table_data').DataTable({
                 processing: true,
                 serverSide: false,
@@ -167,16 +181,13 @@
             });
 
 
-
-
         });
 
-        $('body').on("click", ".btn-delete", function() {
+        $('body').on("click", ".btn-delete", function () {
             var id = $(this).attr("id")
             $(".btn-destroy").attr("href", window.location.origin + "/armada/" + id + "/delete")
             $("#destroy-modal").modal("show")
         });
     </script>
-
 
 @endpush

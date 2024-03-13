@@ -75,13 +75,17 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::get('cust/my-cmc-request', 'NewCMCController@myRequestView');
+    Route::get('commercial/my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'commercialRequestView']);
+    Route::get('commercial/proc-my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'commercialPOInputtedView']);
+    Route::get('warehouse/my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'warehouseRequestView']);
+    Route::get('warehouse/proc-my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'warehouseInputtedView']);
 
 
     Route::prefix('cmc')->group(function () {
         Route::get('create-new', 'NewCMCController@newRequest');
         Route::post('store-new', 'NewCMCController@storeNewRequest')->name("new_po_request.store");
-        Route::get('{id}/edit', 'NewCMCController@editCMCView');
-        Route::post('{id}/update', 'NewCMCController@editCMCView')->name("new_po_request.update");;
+        Route::get('{id}/edit', [App\Http\Controllers\NewCMCController::class, 'editCMCView']);
+        Route::post('{id}/update', [App\Http\Controllers\NewCMCController::class, 'updateRequest'])->name("new_po_request.update");
         Route::get('{id}/cancel', 'OutbondController@cancelKeluar');
         Route::post('/update', 'OutbondController@update');
         Route::get('{id}/delete', 'OutbondController@destroy');
