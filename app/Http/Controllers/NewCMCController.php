@@ -78,6 +78,24 @@ class NewCMCController extends Controller
         );
     }
 
+    public function commercialCompletedView(Request $request)
+    {
+        $datas = PoRequest::where('last_process_by', '=', 4)
+                         ->whereNotNull('id_armada')
+                         ->whereNotNull('id_driver')
+                         ->get();
+        $topTitle = "Manage Permintaan";
+        $topSubTitle = "Permintaan Siap Untuk Dikirim";
+        $bodyTitle = "Permintaan Telah Diproses Warehouse";
+        return view('cmc.my_request')->with(
+            compact(
+                'datas',
+                'bodyTitle',
+                'topTitle',
+                'topSubTitle')
+        );
+    }
+
     public function myRequestView(Request $request)
     {
         $datas = PoRequest::where('disiapkan_oleh', '=', Auth::id())->get();

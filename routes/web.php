@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('cust/my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'myRequestView']);
     Route::get('commercial/my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'commercialRequestView']);
     Route::get('commercial/proc-my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'commercialPOInputtedView']);
+    Route::get('commercial/completed-requests', [App\Http\Controllers\NewCMCController::class, 'commercialCompletedView']);
     Route::get('warehouse/my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'warehouseRequestView']);
     Route::get('warehouse/proc-my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'warehouseInputtedView']);
 

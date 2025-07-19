@@ -101,10 +101,12 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>
-                                                    @if(empty($data->po_number))
-                                                        <span class="badge bg-warning text-dark">Menunggu PO</span>
+                                                    @if(!empty($data->id_armada) && !empty($data->id_driver))
+                                                        <span class="badge bg-success">✅ Siap Dikirim</span>
+                                                    @elseif(!empty($data->po_number))
+                                                        <span class="badge bg-info">🚛 Proses Warehouse</span>
                                                     @else
-                                                        <span class="badge bg-success">PO: {{ $data->po_number }}</span>
+                                                        <span class="badge bg-warning text-dark">⏳ Menunggu PO</span>
                                                     @endif
                                                 </td>
                                                 <td>{{ $data->nomor_surat_jalan }}</td>
