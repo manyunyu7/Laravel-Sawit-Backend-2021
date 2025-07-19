@@ -5,8 +5,8 @@
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                    <h3>Manage Permintaan</h3>
-                    <p class="text-subtitle text-muted">Permintaan Saya</p>
+                    <h3>{{ $topTitle ?? 'Manage Permintaan' }}</h3>
+                    <p class="text-subtitle text-muted">{{ $topSubTitle ?? 'Permintaan Saya' }}</p>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                     <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -38,7 +38,7 @@
                                 <div class="btn btn-outline-primary mb-3">Buat Permintaan Baru</div>
                             </a>
                         @endif
-                        <h4 class="card-title">Lihat Seluruh Pemintaan Saya</h4>
+                        <h4 class="card-title">{{ $bodyTitle ?? 'Lihat Seluruh Pemintaan Saya' }}</h4>
                     </div>
 
                     <div class="card-body">
@@ -59,6 +59,7 @@
                                         <thead>
                                         <tr>
                                             <th data-sortable="" class="text-nowrap">No</th>
+                                            <th data-sortable="" class="text-nowrap">Status PO</th>
                                             <th data-sortable="" class="text-nowrap">Nomor Surat Jalan</th>
                                             <th data-sortable="" class="text-nowrap">Disiapkan Oleh</th>
                                             <th data-sortable="" class="text-nowrap">Proses Terakhir</th>
@@ -99,6 +100,13 @@
                                             @endphp
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>
+                                                    @if(empty($data->po_number))
+                                                        <span class="badge bg-warning text-dark">Menunggu PO</span>
+                                                    @else
+                                                        <span class="badge bg-success">PO: {{ $data->po_number }}</span>
+                                                    @endif
+                                                </td>
                                                 <td>{{ $data->nomor_surat_jalan }}</td>
                                                 <td>{{ $disiapkanOlehName }}</td>
                                                 <td>{{ $prosesTerakhirName }}</td>

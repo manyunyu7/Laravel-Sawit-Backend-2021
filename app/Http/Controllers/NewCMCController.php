@@ -29,7 +29,16 @@ class NewCMCController extends Controller
     public function commercialRequestView(Request $request)
     {
         $datas = PoRequest::where('last_process_by', '=', 3)->get();
-        return view('cmc.my_request')->with(compact('datas'));
+        $topTitle = "Manage Permintaan";
+        $topSubTitle = "Permintaan Yang Menunggu Nomor PO";
+        $bodyTitle = "Permintaan Menunggu Input PO";
+        return view('cmc.my_request')->with(
+            compact(
+                'datas',
+                'bodyTitle',
+                'topTitle',
+                'topSubTitle')
+        );
     }
 
     public function warehouseRequestView(Request $request)
@@ -56,7 +65,7 @@ class NewCMCController extends Controller
 
     public function commercialPOInputtedView(Request $request)
     {
-        $datas = PoRequest::where('last_process_by', '=', 3)->get();
+        $datas = PoRequest::where('last_process_by', '=', 2)->get();
         $topTitle = "Manage Permintaan";
         $topSubTitle = "Permintaan Yang Telah Diinput Nomor PO-nya";
         $bodyTitle = "Permintaan Telah Diinput";
