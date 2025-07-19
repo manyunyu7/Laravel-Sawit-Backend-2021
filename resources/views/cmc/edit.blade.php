@@ -42,10 +42,15 @@
                             </div>
                             <div class="ms-3 name">
                                 @php
-                                    $userDisiapkanOleh = \App\Models\User::findOrFail($data->disiapkan_oleh);
+                                    $userDisiapkanOleh = $data->disiapkan_oleh ? \App\Models\User::find($data->disiapkan_oleh) : null;
                                 @endphp
-                                <h5 class="font-bold">{{$userDisiapkanOleh->name}}</h5>
-                                <h6 class="text-muted mb-0">{{$userDisiapkanOleh->email}}</h6>
+                                @if($userDisiapkanOleh)
+                                    <h5 class="font-bold">{{$userDisiapkanOleh->name}}</h5>
+                                    <h6 class="text-muted mb-0">{{$userDisiapkanOleh->email}}</h6>
+                                @else
+                                    <h5 class="font-bold">Unknown User</h5>
+                                    <h6 class="text-muted mb-0">User not found</h6>
+                                @endif
                             </div>
                         </div>
                     </div>
