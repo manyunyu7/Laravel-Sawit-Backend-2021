@@ -63,15 +63,21 @@
                         <div class="d-flex align-items-center">
                             <div class="ms-3 name">
                                 @php
-                                    $armada = \App\Models\Truck::findOrFail($data->id_armada);
+                                    $armada = $data->id_armada ? \App\Models\Truck::find($data->id_armada) : null;
                                 @endphp
-                                <div class="border p-3">
-                                    <img height="300px" style="border-radius: 20px" src="/razky_samples/truck/colt_diesel.png" alt="" srcset="">
-                                    <ul>
-                                        <li class="mt-3">Nama : {{$armada->name}}</li>
-                                        <li>Nopol : {{$armada->nopol}}</li>
-                                    </ul>
-                                </div>
+                                @if($armada)
+                                    <div class="border p-3">
+                                        <img height="300px" style="border-radius: 20px" src="/razky_samples/truck/colt_diesel.png" alt="" srcset="">
+                                        <ul>
+                                            <li class="mt-3">Nama : {{$armada->name}}</li>
+                                            <li>Nopol : {{$armada->nopol}}</li>
+                                        </ul>
+                                    </div>
+                                @else
+                                    <div class="border p-3 text-center text-muted">
+                                        <p>Armada belum dipilih</p>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
