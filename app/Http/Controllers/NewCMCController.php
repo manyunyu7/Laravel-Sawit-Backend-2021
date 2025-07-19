@@ -178,8 +178,24 @@ class NewCMCController extends Controller
         // Find the existing PoRequest instance
         $poRequest = PoRequest::findOrFail($id);
 
-        // Update the attributes
-        $poRequest->fill($validatedData);
+        // Filter fields based on user role to prevent cross-role modifications
+        $allowedFields = [];
+        if (Auth::user()->role == 2) {
+            // Commercial: only PO number and commercial comments
+            $allowedFields = array_intersect_key($validatedData, 
+                array_flip(['po_number', 'comment_commercial', 'kode_produk', 'uraian', 'jumlah', 'unit', 'berat_kotor', 'volume']));
+        } elseif (Auth::user()->role == 4) {
+            // Warehouse: only armada, driver and warehouse comments
+            $allowedFields = array_intersect_key($validatedData,
+                array_flip(['id_armada', 'id_driver', 'comment_warehouse']));
+        } else {
+            // Other roles: general fields only
+            $allowedFields = array_intersect_key($validatedData,
+                array_flip(['nomor_surat_jalan', 'nomor_surat_jalan_date', 'deadline', 'comment_customer']));
+        }
+
+        // Update the attributes with role-filtered data
+        $poRequest->fill($allowedFields);
 
         // Serialize and update the products
         $products = [];
@@ -201,7 +217,7 @@ class NewCMCController extends Controller
         if (Auth::user()->role==2 && $request->po_number!=""){
             $action = Auth::user()->name." "."Telah Menginput Nomor PO :"." ".$request->po_number;
         }
-        if (Auth::user()->role==4 && $request->po_number!=""){
+        if (Auth::user()->role==4 && ($request->id_armada || $request->id_driver)){
             $action = Auth::user()->name." "."Telah Menginput Armada Ekspedisi";
         }
         // Create a new CMCTimeline entry if there are changes
