@@ -80,6 +80,33 @@
 
 
                 @if(Auth::user()->role==1)
+                    <li class="sidebar-item  has-sub {{ (Request::is('admin/cmc/*')) ? 'active' : ''}}">
+                        <a href="#" class='sidebar-link'>
+                            <i class="bi bi-shield-check"></i>
+                            <span>Admin CMC Control</span>
+                        </a>
+                        <ul class="submenu {{ (Request::is('admin/cmc/*')) ? 'active' : ''}}">
+                            <li class="submenu-item">
+                                <a href="{{url('commercial/my-cmc-request')}}">⏳ Menunggu PO</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{url('commercial/proc-my-cmc-request')}}">📋 Telah Input PO</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{url('warehouse/my-cmc-request')}}">🚛 Menunggu Warehouse</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{url('warehouse/proc-my-cmc-request')}}">✅ Siap Dikirim</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{url('commercial/completed-requests')}}">🎯 All Completed</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{url('cmc/create-new')}}">➕ Buat Request Baru</a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li class="sidebar-item  has-sub {{ (Request::is('admin/user/*')) ? 'active' : ''}}">
                         <a href="#" class='sidebar-link'>
                             <i class="fas fa-users"></i>

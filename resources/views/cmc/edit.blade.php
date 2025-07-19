@@ -109,7 +109,7 @@
                         </div>
 
 
-                        <div class="col-12 @if(Auth::user()->role!=2) d-none @endif mb-4">
+                        <div class="col-12 @if(Auth::user()->role!=2 && Auth::user()->role!=1) d-none @endif mb-4">
                             <div style="border: 1px solid lightgrey; border-radius: 20px; padding: 10px;">
                                 <h3 class="card-title">
                                     Masukkan Nomor PO (Commercial)
@@ -233,7 +233,7 @@
 
                         </div>
 
-                        <div class="col-12 @if(Auth::user()->role!=4) d-none @endif mb-4">
+                        <div class="col-12 @if(Auth::user()->role!=4 && Auth::user()->role!=1) d-none @endif mb-4">
                             <div style="border: 1px solid lightgrey; border-radius: 20px; padding: 10px;">
                                 <h3 class="card-title">
                                     Masukkan Informasi Armada & Driver
@@ -437,7 +437,7 @@
                                         <th>Unit</th>
                                         <th>Berat Kotor (KG)</th>
                                         <th>Volume (Liter)</th>
-                                        @if(Auth::user()->role==2)
+                                        @if(Auth::user()->role==2 || Auth::user()->role==1)
                                             <th>Action</th>
                                         @endif
 
@@ -454,7 +454,7 @@
                                                 <td>{{ $product['unit'] }}</td>
                                                 <td>{{ $product['berat_kotor'] }}</td>
                                                 <td>{{ $product['volume'] }}</td>
-                                                @if(Auth::user()->role==2)
+                                                @if(Auth::user()->role==2 || Auth::user()->role==1)
                                                     <td>
                                                         <button type="button" class="btn btn-danger remove-btn"
                                                                 onclick="removeRow(this)">Remove
@@ -470,7 +470,7 @@
                                     @endif
                                     </tbody>
                                 </table>
-                                @if(Auth::user()->role==2)
+                                @if(Auth::user()->role==2 || Auth::user()->role==1)
                                     <button type="button" class="btn btn-outline-primary" id="addRow">Tambah Barang
                                     </button>
                                 @endif

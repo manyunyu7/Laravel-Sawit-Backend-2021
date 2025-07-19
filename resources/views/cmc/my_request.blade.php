@@ -33,7 +33,7 @@
                 <div class="card">
                     <div class="card-header">
 
-                        @if(Auth::user()->role=="3")
+                        @if(Auth::user()->role=="3" || Auth::user()->role=="1")
                             <a href="{{url("/cmc/create-new")}}">
                                 <div class="btn btn-outline-primary mb-3">Buat Permintaan Baru</div>
                             </a>

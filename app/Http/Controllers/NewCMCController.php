@@ -215,6 +215,9 @@ class NewCMCController extends Controller
             // Warehouse: only armada, driver and warehouse comments
             $allowedFields = array_intersect_key($validatedData,
                 array_flip(['id_armada', 'id_driver', 'comment_warehouse']));
+        } elseif (Auth::user()->role == 1) {
+            // Admin: can update all fields (when staff unavailable)
+            $allowedFields = $validatedData;
         } else {
             // Other roles: general fields only
             $allowedFields = array_intersect_key($validatedData,
@@ -241,10 +244,10 @@ class NewCMCController extends Controller
 
         $action = "Edit Data";
 
-        if (Auth::user()->role==2 && $request->po_number!=""){
+        if ((Auth::user()->role==2 || Auth::user()->role==1) && $request->po_number!=""){
             $action = Auth::user()->name." "."Telah Menginput Nomor PO :"." ".$request->po_number;
         }
-        if (Auth::user()->role==4 && ($request->id_armada || $request->id_driver)){
+        if ((Auth::user()->role==4 || Auth::user()->role==1) && ($request->id_armada || $request->id_driver)){
             $action = Auth::user()->name." "."Telah Menginput Armada Ekspedisi";
         }
         // Create a new CMCTimeline entry if there are changes
