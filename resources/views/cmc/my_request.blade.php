@@ -101,10 +101,16 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>
-                                                    @if(!empty($data->id_armada) && !empty($data->id_driver))
-                                                        <span class="badge bg-success">✅ Siap Dikirim</span>
+                                                    @if($data->delivery_status == 'received')
+                                                        <span class="badge bg-success">✅ Diterima Customer</span>
+                                                    @elseif($data->delivery_status == 'delivered')
+                                                        <span class="badge bg-primary">📦 Sudah Dikirim</span>
+                                                    @elseif($data->delivery_status == 'dispatched')
+                                                        <span class="badge bg-info">🚚 Dalam Perjalanan</span>
+                                                    @elseif(!empty($data->id_armada) && !empty($data->id_driver))
+                                                        <span class="badge bg-secondary">🚛 Siap Dikirim</span>
                                                     @elseif(!empty($data->po_number))
-                                                        <span class="badge bg-info">🚛 Proses Warehouse</span>
+                                                        <span class="badge bg-info">📋 Proses Warehouse</span>
                                                     @else
                                                         <span class="badge bg-warning text-dark">⏳ Menunggu PO</span>
                                                     @endif
@@ -160,9 +166,37 @@
                                                 <td>
                                                     <a href="{{url('cmc/'.$data->id.'/edit')}}">
                                                         <button id="{{ $data->id }}" type="button"
-                                                                class="btn btn-outline-primary text-nowrap">Edit Data
+                                                                class="btn btn-outline-primary text-nowrap mb-1">Edit Data
                                                         </button>
                                                     </a>
+                                                    
+                                                    @php
+                                                        $canDispatch = $data->last_process_by == 4 && 
+                                                                      !empty($data->id_armada) && 
+                                                                      !empty($data->id_driver) && 
+                                                                      $data->delivery_status == 'ready';
+                                                        $canDeliver = $data->delivery_status == 'dispatched';
+                                                        $canReceive = $data->delivery_status == 'delivered';
+                                                    @endphp
+                                                    
+                                                    @if($canDispatch && (Auth::user()->role == 4 || Auth::user()->role == 1))
+                                                        <form method="POST" action="{{ route('cmc.dispatch', $data->id) }}" style="display: inline;">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-info text-nowrap mb-1">🚚 Dispatch</button>
+                                                        </form>
+                                                    @endif
+                                                    
+                                                    @if($canDeliver && (Auth::user()->role == 4 || Auth::user()->role == 1))
+                                                        <button type="button" class="btn btn-primary text-nowrap mb-1" data-bs-toggle="modal" data-bs-target="#deliverModal{{ $data->id }}">
+                                                            📦 Kirim
+                                                        </button>
+                                                    @endif
+                                                    
+                                                    @if($canReceive && (Auth::user()->role == 3 || Auth::user()->role == 1))
+                                                        <button type="button" class="btn btn-success text-nowrap mb-1" data-bs-toggle="modal" data-bs-target="#receiveModal{{ $data->id }}">
+                                                            ✅ Terima
+                                                        </button>
+                                                    @endif
 
                                                 </td>
                                             </tr>
@@ -181,6 +215,61 @@
             </div>
         </div>
     </section>
+
+    <!-- Delivery Modals -->
+    @foreach ($datas as $data)
+        <!-- Deliver Modal -->
+        <div class="modal fade" id="deliverModal{{ $data->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Pengiriman</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form method="POST" action="{{ route('cmc.deliver', $data->id) }}" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <p>Apakah Anda yakin ingin mengkonfirmasi pengiriman barang ini?</p>
+                            <div class="form-group">
+                                <label>Upload Bukti Pengiriman (Opsional)</label>
+                                <input type="file" name="delivery_proof" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary">📦 Konfirmasi Kirim</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Receive Modal -->
+        <div class="modal fade" id="receiveModal{{ $data->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konfirmasi Penerimaan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form method="POST" action="{{ route('cmc.receive', $data->id) }}">
+                        @csrf
+                        <div class="modal-body">
+                            <p>Apakah Anda yakin telah menerima barang ini?</p>
+                            <div class="form-group">
+                                <label>Catatan/Feedback (Opsional)</label>
+                                <textarea name="customer_notes" class="form-control" rows="3" placeholder="Kondisi barang, komentar, dll..."></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-success">✅ Konfirmasi Terima</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
 
     <!-- Modal -->

@@ -49,6 +49,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('commercial/completed-requests', [App\Http\Controllers\NewCMCController::class, 'commercialCompletedView']);
     Route::get('warehouse/my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'warehouseRequestView']);
     Route::get('warehouse/proc-my-cmc-request', [App\Http\Controllers\NewCMCController::class, 'warehouseInputtedView']);
+    
+    // Delivery tracking routes
+    Route::post('cmc/{id}/dispatch', [App\Http\Controllers\NewCMCController::class, 'dispatchRequest'])->name('cmc.dispatch');
+    Route::post('cmc/{id}/deliver', [App\Http\Controllers\NewCMCController::class, 'deliverRequest'])->name('cmc.deliver');
+    Route::post('cmc/{id}/receive', [App\Http\Controllers\NewCMCController::class, 'receiveRequest'])->name('cmc.receive');
 
 
     Route::prefix('cmc')->group(function () {

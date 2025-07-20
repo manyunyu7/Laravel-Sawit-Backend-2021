@@ -96,6 +96,97 @@ class NewCMCController extends Controller
         );
     }
 
+    public function dispatchRequest(Request $request, $id)
+    {
+        $poRequest = PoRequest::findOrFail($id);
+        
+        if (!$poRequest->canDispatch()) {
+            return back()->with(['error' => 'Request tidak dapat didispatch pada saat ini']);
+        }
+        
+        $poRequest->delivery_status = PoRequest::DELIVERY_DISPATCHED;
+        $poRequest->dispatch_date = now();
+        $poRequest->dispatched_by = Auth::id();
+        
+        if ($poRequest->save()) {
+            CMCTimeline::create([
+                'action' => Auth::user()->name . " telah dispatch barang untuk dikirim",
+                'po_requests_id' => $poRequest->id,
+                'last_man' => Auth::id(),
+                'edited_field' => $poRequest,
+            ]);
+            
+            return back()->with(['success' => 'Barang berhasil didispatch']);
+        }
+        
+        return back()->with(['error' => 'Gagal dispatch barang']);
+    }
+
+    public function deliverRequest(Request $request, $id)
+    {
+        $poRequest = PoRequest::findOrFail($id);
+        
+        if (!$poRequest->canDeliver()) {
+            return back()->with(['error' => 'Request tidak dapat didelivery pada saat ini']);
+        }
+        
+        // Handle delivery proof upload if provided
+        $deliveryProof = null;
+        if ($request->hasFile('delivery_proof')) {
+            $file = $request->file('delivery_proof');
+            $filename = time() . '_delivery_' . $id . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('web_files/delivery_proof'), $filename);
+            $deliveryProof = 'web_files/delivery_proof/' . $filename;
+        }
+        
+        $poRequest->delivery_status = PoRequest::DELIVERY_DELIVERED;
+        $poRequest->delivery_date = now();
+        $poRequest->delivered_by = Auth::id();
+        if ($deliveryProof) {
+            $poRequest->delivery_proof = $deliveryProof;
+        }
+        
+        if ($poRequest->save()) {
+            CMCTimeline::create([
+                'action' => Auth::user()->name . " telah mengirim barang ke customer",
+                'po_requests_id' => $poRequest->id,
+                'last_man' => Auth::id(),
+                'edited_field' => $poRequest,
+            ]);
+            
+            return back()->with(['success' => 'Barang berhasil dikirim']);
+        }
+        
+        return back()->with(['error' => 'Gagal mengirim barang']);
+    }
+
+    public function receiveRequest(Request $request, $id)
+    {
+        $poRequest = PoRequest::findOrFail($id);
+        
+        if (!$poRequest->canReceive()) {
+            return back()->with(['error' => 'Request tidak dapat dikonfirmasi pada saat ini']);
+        }
+        
+        $poRequest->delivery_status = PoRequest::DELIVERY_RECEIVED;
+        $poRequest->received_date = now();
+        $poRequest->received_by = Auth::id();
+        $poRequest->customer_notes = $request->customer_notes;
+        
+        if ($poRequest->save()) {
+            CMCTimeline::create([
+                'action' => Auth::user()->name . " telah mengkonfirmasi penerimaan barang",
+                'po_requests_id' => $poRequest->id,
+                'last_man' => Auth::id(),
+                'edited_field' => $poRequest,
+            ]);
+            
+            return back()->with(['success' => 'Penerimaan barang berhasil dikonfirmasi']);
+        }
+        
+        return back()->with(['error' => 'Gagal konfirmasi penerimaan barang']);
+    }
+
     public function myRequestView(Request $request)
     {
         $datas = PoRequest::where('disiapkan_oleh', '=', Auth::id())->get();
